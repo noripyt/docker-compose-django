@@ -42,7 +42,7 @@ ENV PYTHONUNBUFFERED=true
 CMD gunicorn $PROJECT.wsgi:application -b django:8000 --workers $((2 * $BACKEND_CPUS + 1)) -t 86400
 
 
-FROM nginx:1.24.0-alpine-slim AS nginx
+FROM nginx:1.26.1-alpine-slim AS nginx
 
 COPY --chown=nginx ./nginx/templates /etc/nginx/templates
 COPY --chown=nginx ./nginx/ /srv/nginx

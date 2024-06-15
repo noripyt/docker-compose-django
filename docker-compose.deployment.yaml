@@ -1,0 +1,29 @@
+version: "3.6"
+
+services:
+  nginx:
+    labels:
+      traefik.http.routers.nginx.entrypoints: websecure
+      traefik.http.routers.nginx.tls.certresolver: letsencrypt
+  traefik:
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.letsencrypt.acme.email=$EMAIL"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "443:443"
+    volumes:
+      - letsencrypt:/letsencrypt
+    healthcheck:
+      test: nc -z -w1 traefik 443
+
+volumes:
+  letsencrypt:
