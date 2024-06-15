@@ -1,0 +1,230 @@
+services:
+  postgresql:
+    image: postgres:16.3-alpine
+    user: postgres
+    environment:
+      # We have to redefine POSTGRES_DB and POSTGRES_USER as themselves due to this: https://docs.docker.com/compose/environment-variables/envvars-precedence/
+      POSTGRES_DB: $PROJECT
+      POSTGRES_USER: $PROJECT
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_INITDB_ARGS: --locale-provider=icu --icu-locale=$POSTGRES_LOCALE
+      LC_COLLATE: $LANG
+      LC_CTYPE: $LANG
+      LC_MESSAGES: $LANG
+      LC_MONETARY: $LANG
+      LC_NUMERIC: $LANG
+      LC_TIME: $LANG
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+      - postgresql-socket:/var/run/postgresql
+    network_mode: none
+    read_only: true
+    tmpfs:
+      - /tmp/
+      - /run/postgresql/
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", $PROJECT ]
+      interval: 1s
+      timeout: 1s
+      retries: 60
+    restart: always
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - DAC_READ_SEARCH
+      - FOWNER
+      - SETGID
+      - SETUID
+    deploy:
+      mode: global
+      resources:
+        limits:
+          cpus: "1"
+          memory: 500M
+        reservations:
+          cpus: "0.1"
+          memory: 50M
+  migrate:
+    image: $PROJECT/django:${IMAGES_TAG:-latest}
+    user: django
+    command: python manage.py migrate
+    volumes:
+      - postgresql-socket:/var/run/postgresql
+      - media:/srv/media
+    networks:
+      default:
+    read_only: true
+    tmpfs:
+      - /tmp/
+    restart: "no"
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 2500M
+        reservations:
+          memory: 100M
+  django:
+    build:
+      context: .
+      target: django
+      args:
+        PROJECT: $PROJECT
+        BACKEND_CPUS: ${BACKEND_CPUS:-1}
+        DJANGO_SETTINGS_MODULE: $DJANGO_SETTINGS_MODULE
+        DOMAIN: $DOMAIN
+    image: $PROJECT/django:${IMAGES_TAG:-latest}
+    user: django
+    volumes:
+      - postgresql-socket:/var/run/postgresql
+      - media:/srv/media
+    tmpfs:
+      - /tmp/
+    networks:
+      default:
+    read_only: true
+    expose:
+      - 8000
+    healthcheck:
+      test: python3 -c "import urllib.request; urllib.request.urlopen('http://django:8000${DJANGO_HEALTHCHECK_URL:-/}')"
+      interval: 1s
+      timeout: 1s
+      retries: 60
+    restart: always
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "${BACKEND_CPUS:-1}"
+          memory: 4000M
+        reservations:
+          cpus: "0.1"
+          memory: 500M
+  nginx:
+    build:
+      context: .
+      target: nginx
+      args:
+        PROJECT: $PROJECT
+        BACKEND_CPUS: ${BACKEND_CPUS:-1}
+        DJANGO_SETTINGS_MODULE: $DJANGO_SETTINGS_MODULE
+        DOMAIN: $DOMAIN
+    image: $PROJECT/nginx:${IMAGES_TAG:-latest}
+    environment:
+      # We have to redefine some variables as themselves due to this: https://docs.docker.com/compose/environment-variables/envvars-precedence/
+      DOMAIN: $DOMAIN
+      ALTERNATE_DOMAINS: $ALTERNATE_DOMAINS
+      IPV4_SUBNET: $IPV4_SUBNET
+      IPV6_SUBNET: $IPV6_SUBNET
+      CLIENT_MAX_BODY_SIZE: 2000M
+      HSTS_MAX_AGE: 86400
+      CSP_DEFAULT: default-src 'self'
+      CSP_SCRIPT: script-src 'self' 'unsafe-inline' 'unsafe-eval'
+      CSP_IMG: "img-src 'self' data: blob:"
+      CSP_STYLE: style-src 'self' 'unsafe-inline'
+      CSP_FONT: "font-src 'self' data:"
+      CSP_CONNECT: connect-src 'self'
+      CSP_FRAME: frame-src 'self'
+      CSP_OBJECT: object-src 'self'
+      PROXY_READ_TIMEOUT: 21600s
+    volumes:
+      - media:/srv/media:ro
+      # TODO: Expose nginx logs so fail2ban can read it.
+    networks:
+      default:
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx/
+      - /var/run/
+      - /etc/nginx/conf.d/
+    healthcheck:
+      test: nc -vz -w1 nginx 80
+      interval: 1s
+      timeout: 1s
+      retries: 60
+    restart: always
+    depends_on:
+      django:
+        condition: service_healthy
+    expose:
+      - 80
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+      - CHOWN
+      - SETGID
+      - SETUID
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 100M
+        reservations:
+          cpus: "0.1"
+          memory: 6M
+    labels:
+      traefik.enable: true
+      traefik.http.routers.nginx.rule: Host(`www.$DOMAIN`, `$DOMAIN`)
+      traefik.http.routers.nginx.middlewares: nginx-ratelimit,nginx-inflightreq
+      traefik.http.middlewares.nginx-ratelimit.ratelimit.average: 30
+      traefik.http.middlewares.nginx-ratelimit.ratelimit.burst: 150
+      traefik.http.middlewares.nginx-inflightreq.inflightreq.amount: 80
+  traefik:
+    image: traefik:2.11.4
+    container_name: traefik
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      default:
+    read_only: true
+    restart: always
+    healthcheck:
+      test: nc -z -w1 traefik 80
+      interval: 1s
+      timeout: 1s
+      retries: 60
+    depends_on:
+      nginx:
+        condition: service_healthy
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 500M
+        reservations:
+          cpus: "0.1"
+          memory: 50M
+    labels:
+      traefik.enable: true
+
+volumes:
+  postgresql:
+  postgresql-socket:
+  media:
+
+networks:
+  default:
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: $IPV4_SUBNET
+        - subnet: $IPV6_SUBNET
