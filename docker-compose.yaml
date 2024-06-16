@@ -93,9 +93,9 @@ services:
       - 8000
     healthcheck:
       test: python3 -c "import urllib.request; urllib.request.urlopen('http://django:8000${DJANGO_HEALTHCHECK_URL:-/}')"
-      interval: 1s
-      timeout: 1s
-      retries: 60
+      interval: 10s
+      timeout: 5s
+      retries: 6
     restart: unless-stopped
     depends_on:
       postgresql:
