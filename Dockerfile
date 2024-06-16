@@ -1,12 +1,6 @@
 FROM python:3.12.3-slim-bookworm AS django
 
-ENV DEBIAN_FRONTEND="noninteractive" TZ="Europe/Paris"
-
-#RUN apt-get update -y --quiet \
-#    && apt-get install -y --no-install-recommends \
-#    && rm -rf \
-#    /var/lib/apt/lists/* /var/cache/apt/archives/* /usr/share/doc/* \
-#    /usr/share/man/* /usr/share/info/* /usr/share/lintian/*
+ENV DEBIAN_FRONTEND="noninteractive"
 
 RUN adduser --disabled-password --gecos "" --home /srv --no-create-home django
 WORKDIR /srv
@@ -43,6 +37,11 @@ CMD gunicorn $PROJECT.wsgi:application -b django:8000 --workers $((2 * $BACKEND_
 
 
 FROM nginx:1.26.1-alpine-slim AS nginx
+
+ARG PROJECT
+
+RUN sed -i "s|/var/log/nginx/|/var/log/nginx/${PROJECT}.|g" /etc/nginx/nginx.conf  \
+    && grep -q "/var/log/nginx/${PROJECT}." /etc/nginx/nginx.conf
 
 COPY --chown=nginx ./nginx/templates /etc/nginx/templates
 COPY --chown=nginx ./nginx/ /srv/nginx

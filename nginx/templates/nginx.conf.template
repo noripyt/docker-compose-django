@@ -72,7 +72,7 @@ server {
 
   # Parameters to avoid DDOS attacks on static files
   limit_conn static_conn 100;
-  limit_req zone=static_req burst=500;
+  limit_req zone=static_req burst=500 nodelay;
 
   location /media {
     alias /srv/media;
@@ -104,7 +104,7 @@ server {
 
     # Parameters to avoid DDOS attacks on gunicorn
     limit_conn django_conn 10;
-    limit_req zone=django_req burst=50;
+    limit_req zone=django_req burst=50 nodelay;
   }
 }
 

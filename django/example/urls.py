@@ -17,6 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from .views import slow_view
+
 urlpatterns = [
+    path('', slow_view),
     path('admin/', admin.site.urls),
 ]

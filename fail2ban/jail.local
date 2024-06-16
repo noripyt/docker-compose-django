@@ -1,0 +1,42 @@
+[DEFAULT]
+# Prevents banning LAN subnets
+ignoreip = 127.0.0.1/8 ::1
+           10.0.0.0/8
+           172.16.0.0/12
+           192.168.0.0/16
+
+[sshd]
+# configuration inherits from jail.conf
+enabled = ${HOST_HAS_SSH}
+chain   = INPUT
+action  = %(known/action)s
+
+[nginx-bad-request]
+# configuration inherits from jail.conf
+enabled = true
+chain   = DOCKER-USER
+action  = %(known/action)s
+
+[nginx-badbots]
+# configuration inherits from jail.d/nginx-badbots.conf
+enabled = true
+chain   = DOCKER-USER
+action  = %(known/action)s
+
+[nginx-botsearch]
+# configuration inherits from jail.conf
+enabled = true
+chain   = DOCKER-USER
+action  = %(known/action)s
+
+[nginx-http-auth]
+# configuration inherits from jail.conf
+enabled = true
+chain   = DOCKER-USER
+action  = %(known/action)s
+
+[nginx-limit-req]
+# configuration inherits from jail.conf
+enabled = true
+chain   = DOCKER-USER
+action  = %(known/action)s
