@@ -41,7 +41,12 @@ FROM nginx:1.26.1-alpine-slim AS nginx
 ARG PROJECT
 
 RUN sed -i "s|/var/log/nginx/|/var/log/nginx/${PROJECT}.|g" /etc/nginx/nginx.conf  \
-    && grep -q "/var/log/nginx/${PROJECT}." /etc/nginx/nginx.conf
+    && grep -q "/var/log/nginx/${PROJECT}." /etc/nginx/nginx.conf \
+    # Removes the /dev/stdout|/dev/stderr redirects created by the nginx base image.
+    # We want to preserve the logs in a volume, and we want custom prefixes.
+    # We also want fail2ban to not read stdout|stderr as they are endless, blocking
+    # read from prefixed (access|error).log files.
+    && rm /var/log/nginx/*
 
 COPY --chown=nginx ./nginx/templates /etc/nginx/templates
 COPY --chown=nginx ./nginx/ /srv/nginx
