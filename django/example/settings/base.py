@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
+from django.utils.log import DEFAULT_LOGGING
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -67,6 +69,19 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'example.wsgi.application'
+
+
+# Modifies the default LOGGING to display to console when in production.
+LOGGING = {
+    **DEFAULT_LOGGING,
+    'handlers': {
+        **DEFAULT_LOGGING['handlers'],
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+        },
+    },
+}
 
 
 # Database
