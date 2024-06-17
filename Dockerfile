@@ -37,6 +37,9 @@ RUN python3 manage.py collectstatic --no-input
 
 WORKDIR /srv
 
+ARG DJANGO_POST_INSTALL_RUN
+RUN if [ "${DJANGO_POST_INSTALL_RUN}" != "" ] ; then ${DJANGO_POST_INSTALL_RUN} ; fi
+
 # Makes gunicorn display stdout & stderr as soon as they are printed.
 ENV PYTHONUNBUFFERED=true
 
