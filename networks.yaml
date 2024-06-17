@@ -1,0 +1,7 @@
+networks:
+  default:
+    enable_ipv6: true
+    ipam:
+      config:
+        - subnet: $IPV4_SUBNET
+        - subnet: $IPV6_SUBNET
