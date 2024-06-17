@@ -2,6 +2,14 @@ ARG PYTHON_IMAGE
 FROM ${PYTHON_IMAGE} AS django
 
 ENV DEBIAN_FRONTEND="noninteractive"
+ARG PYTHON_APT_DEPENDENCIES
+RUN if [ "${PYTHON_APT_DEPENDENCIES}" != "" ] ; then \
+    apt-get update -y --quiet \
+    && apt-get install -y --no-install-recommends ${PYTHON_APT_DEPENDENCIES} \
+    && rm -rf \
+    /var/lib/apt/lists/* /var/cache/apt/archives/* /usr/share/doc/* \
+    /usr/share/man/* /usr/share/info/* /usr/share/lintian/* /tmp/* \
+    ; fi
 
 RUN adduser --disabled-password --gecos "" --home /srv --no-create-home django
 WORKDIR /srv
