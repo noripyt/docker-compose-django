@@ -81,6 +81,7 @@ services:
       target: django
       args:
         PROJECT: $PROJECT
+        PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.12.3-slim-bookworm}
         BACKEND_CPUS: ${BACKEND_CPUS:-1}
         DJANGO_SETTINGS_MODULE: $DJANGO_SETTINGS_MODULE
         DOMAIN: $DOMAIN
@@ -123,6 +124,7 @@ services:
       target: nginx
       args:
         PROJECT: $PROJECT
+        PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.12.3-slim-bookworm}
         BACKEND_CPUS: ${BACKEND_CPUS:-1}
         DJANGO_SETTINGS_MODULE: $DJANGO_SETTINGS_MODULE
         DOMAIN: $DOMAIN

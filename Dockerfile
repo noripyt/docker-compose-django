@@ -1,4 +1,5 @@
-FROM python:3.12.3-slim-bookworm AS django
+ARG PYTHON_IMAGE
+FROM ${PYTHON_IMAGE} AS django
 
 ENV DEBIAN_FRONTEND="noninteractive"
 
