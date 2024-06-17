@@ -4,3 +4,4 @@ volumes:
   media:
   nginx-logs:
     name: "nginx-logs"  # That way, no project prefix.
+    external: true
