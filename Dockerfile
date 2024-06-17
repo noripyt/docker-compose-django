@@ -46,6 +46,7 @@ CMD gunicorn $PROJECT.wsgi:application -b django:8000 --workers $((2 * $DJANGO_C
 FROM nginx:1.26.1-alpine-slim AS nginx
 
 ARG PROJECT
+ARG NGINX_ROOT
 
 RUN sed -i "s|/var/log/nginx/|/var/log/nginx/${PROJECT}.|g" /etc/nginx/nginx.conf  \
     && grep -q "/var/log/nginx/${PROJECT}." /etc/nginx/nginx.conf \
@@ -55,6 +56,6 @@ RUN sed -i "s|/var/log/nginx/|/var/log/nginx/${PROJECT}.|g" /etc/nginx/nginx.con
     # read from prefixed (access|error).log files.
     && rm /var/log/nginx/*
 
-COPY --chown=nginx ./nginx/templates /etc/nginx/templates
-COPY --chown=nginx ./nginx/ /srv/nginx
+COPY --chown=nginx ${NGINX_ROOT}/templates /etc/nginx/templates
+COPY --chown=nginx ${NGINX_ROOT} /srv/nginx
 COPY --from=django --chown=nginx /srv/static /srv/static

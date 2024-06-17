@@ -131,6 +131,7 @@ services:
         DJANGO_ROOT: ${DJANGO_ROOT}
         DJANGO_SETTINGS_MODULE: $DJANGO_SETTINGS_MODULE
         DJANGO_CPUS: ${DJANGO_CPUS:-1}
+        NGINX_ROOT: ${NGINX_ROOT}
         DOMAIN: $DOMAIN
     image: $PROJECT/nginx:${IMAGES_TAG:-latest}
     environment:
