@@ -81,10 +81,11 @@ services:
       target: django
       args:
         PROJECT: $PROJECT
-        PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.12.3-slim-bookworm}
-        PYTHON_APT_DEPENDENCIES: ${PYTHON_APT_DEPENDENCIES:-}
-        BACKEND_CPUS: ${BACKEND_CPUS:-1}
+        DJANGO_BASE_IMAGE: ${DJANGO_BASE_IMAGE:-python:3.12.3-slim-bookworm}
+        DJANGO_APT_DEPENDENCIES: ${DJANGO_APT_DEPENDENCIES:-}
+        DJANGO_ROOT: ${DJANGO_ROOT}
         DJANGO_SETTINGS_MODULE: $DJANGO_SETTINGS_MODULE
+        DJANGO_CPUS: ${DJANGO_CPUS:-1}
         DOMAIN: $DOMAIN
     image: $PROJECT/django:${IMAGES_TAG:-latest}
     user: django
@@ -114,7 +115,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "${BACKEND_CPUS:-1}"
+          cpus: "${DJANGO_CPUS:-1}"
           memory: 4000M
         reservations:
           cpus: "0.1"
@@ -125,9 +126,11 @@ services:
       target: nginx
       args:
         PROJECT: $PROJECT
-        PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.12.3-slim-bookworm}
-        BACKEND_CPUS: ${BACKEND_CPUS:-1}
+        DJANGO_BASE_IMAGE: ${DJANGO_BASE_IMAGE:-python:3.12.3-slim-bookworm}
+        DJANGO_APT_DEPENDENCIES: ${DJANGO_APT_DEPENDENCIES:-}
+        DJANGO_ROOT: ${DJANGO_ROOT}
         DJANGO_SETTINGS_MODULE: $DJANGO_SETTINGS_MODULE
+        DJANGO_CPUS: ${DJANGO_CPUS:-1}
         DOMAIN: $DOMAIN
     image: $PROJECT/nginx:${IMAGES_TAG:-latest}
     environment:

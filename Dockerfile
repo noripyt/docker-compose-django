@@ -1,11 +1,11 @@
-ARG PYTHON_IMAGE
-FROM ${PYTHON_IMAGE} AS django
+ARG DJANGO_BASE_IMAGE
+FROM ${DJANGO_BASE_IMAGE} AS django
 
 ENV DEBIAN_FRONTEND="noninteractive"
-ARG PYTHON_APT_DEPENDENCIES
-RUN if [ "${PYTHON_APT_DEPENDENCIES}" != "" ] ; then \
+ARG DJANGO_APT_DEPENDENCIES
+RUN if [ "${DJANGO_APT_DEPENDENCIES}" != "" ] ; then \
     apt-get update -y --quiet \
-    && apt-get install -y --no-install-recommends ${PYTHON_APT_DEPENDENCIES} \
+    && apt-get install -y --no-install-recommends ${DJANGO_APT_DEPENDENCIES} \
     && rm -rf \
     /var/lib/apt/lists/* /var/cache/apt/archives/* /usr/share/doc/* \
     /usr/share/man/* /usr/share/info/* /usr/share/lintian/* /tmp/* \
@@ -17,24 +17,22 @@ RUN chown -R django:django /srv
 USER django
 
 ARG PROJECT
+ARG DJANGO_ROOT
 ARG DJANGO_SETTINGS_MODULE
+ARG DJANGO_CPUS
 ARG DOMAIN
 
 ENV PATH="$PATH:/srv/.local/bin" \
     PROJECT=${PROJECT} \
     DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE} \
+    DJANGO_CPUS=${DJANGO_CPUS} \
     DOMAIN=${DOMAIN}
 
-COPY --chown=django django/requirements/* requirements/
+COPY --chown=django ${DJANGO_ROOT}/requirements/* requirements/
 RUN python3 -m pip install --no-cache-dir -r requirements/base.txt -r requirements/prod.txt
 RUN if [ "$DJANGO_SETTINGS_MODULE" = "${PROJECT}.settings.dev" ] ; then python3 -m pip install --no-cache-dir -r requirements/dev.txt ; fi
 
-
-ARG BACKEND_CPUS
-
-ENV BACKEND_CPUS=${BACKEND_CPUS}
-
-COPY --chown=django django /srv
+COPY --chown=django ${DJANGO_ROOT} /srv
 RUN python3 manage.py collectstatic --no-input
 
 WORKDIR /srv
@@ -42,7 +40,7 @@ WORKDIR /srv
 # Makes gunicorn display stdout & stderr as soon as they are printed.
 ENV PYTHONUNBUFFERED=true
 
-CMD gunicorn $PROJECT.wsgi:application -b django:8000 --workers $((2 * $BACKEND_CPUS + 1)) -t 86400
+CMD gunicorn $PROJECT.wsgi:application -b django:8000 --workers $((2 * $DJANGO_CPUS + 1)) -t 86400
 
 
 FROM nginx:1.26.1-alpine-slim AS nginx
