@@ -1,4 +1,5 @@
-version: "3.6"
+include:
+  - volumes.deployment.yaml
 
 services:
   nginx:
@@ -24,6 +25,3 @@ services:
       - letsencrypt:/letsencrypt
     healthcheck:
       test: nc -z -w1 traefik 443
-
-volumes:
-  letsencrypt:
