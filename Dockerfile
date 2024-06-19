@@ -21,6 +21,7 @@ USER django
 
 ARG PROJECT
 ARG DJANGO_ROOT
+ARG DJANGO_COLLECTSTATIC_ARGS
 ARG DJANGO_POST_INSTALL_RUN
 ARG DJANGO_SETTINGS_MODULE
 ARG DJANGO_CPUS
@@ -37,7 +38,7 @@ RUN python3 -m pip install --no-cache-dir -r requirements/base.txt -r requiremen
 RUN if [ "$DJANGO_SETTINGS_MODULE" = "${PROJECT}.settings.dev" ] ; then python3 -m pip install --no-cache-dir -r requirements/dev.txt ; fi
 
 COPY --chown=django ${DJANGO_ROOT} /srv
-RUN python3 manage.py collectstatic --no-input && sh -c "${DJANGO_POST_INSTALL_RUN}"
+RUN python3 manage.py collectstatic --no-input ${DJANGO_COLLECTSTATIC_ARGS} && sh -c "${DJANGO_POST_INSTALL_RUN}"
 
 # Makes gunicorn display stdout & stderr as soon as they are printed.
 ENV PYTHONUNBUFFERED=true
