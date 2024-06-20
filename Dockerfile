@@ -39,6 +39,7 @@ RUN if [ "$DJANGO_SETTINGS_MODULE" = "${PROJECT}.settings.dev" ] ; then python3 
 
 COPY --chown=django ${DJANGO_ROOT} /srv
 RUN python3 manage.py collectstatic --no-input ${DJANGO_COLLECTSTATIC_ARGS} && sh -c "${DJANGO_POST_INSTALL_RUN}"
+RUN mkdir /srv/media
 
 # Makes gunicorn display stdout & stderr as soon as they are printed.
 ENV PYTHONUNBUFFERED=true
