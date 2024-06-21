@@ -240,6 +240,7 @@ services:
     container_name: fail2ban
     network_mode: host
     volumes:
+      - fail2ban:/var/lib/fail2ban
       - /var/log/auth.log:/var/log/auth.log:ro
       - nginx-logs:/var/log/nginx:ro
     healthcheck:
