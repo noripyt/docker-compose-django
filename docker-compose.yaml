@@ -206,12 +206,12 @@ services:
     networks:
       default:
     read_only: true
-    restart: unless-stopped
     healthcheck:
       test: nc -z -w1 traefik 80
       interval: 1s
       timeout: 1s
       retries: 60
+    restart: unless-stopped
     depends_on:
       nginx:
         condition: service_healthy
@@ -248,6 +248,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 6
+    restart: unless-stopped
     depends_on:
       traefik:
         condition: service_healthy
@@ -265,4 +266,29 @@ services:
         reservations:
           cpus: "0.1"
           memory: 30M
+  ofelia:
+    build:
+      context: ofelia
+    image: $PROJECT/ofelia:${IMAGES_TAG:-latest}
+    command: daemon --docker -f label=com.docker.compose.project=${COMPOSE_PROJECT_NAME}
+    container_name: ofelia
+    network_mode: none
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    read_only: true
+    # TODO: Add a health check.
     restart: unless-stopped
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 500M
+        reservations:
+          cpus: "0.1"
+          memory: 50M
+    labels:
+      ofelia.job-local.restart-unhealthy-containers.schedule: "@every 10s"
+      ofelia.job-local.restart-unhealthy-containers.command: "sh -c 'docker ps -q -f health=unhealthy | xargs --no-run-if-empty docker restart'"
+      ofelia.job-local.restart-unhealthy-containers.no-overlap: "true"
