@@ -148,14 +148,14 @@ services:
       IPV6_SUBNET: $IPV6_SUBNET
       CLIENT_MAX_BODY_SIZE: 2000M
       HSTS_MAX_AGE: 86400
-      CSP_DEFAULT: default-src 'self'
-      CSP_SCRIPT: script-src 'self' 'unsafe-inline' 'unsafe-eval'
-      CSP_IMG: "img-src 'self' data: blob:"
-      CSP_STYLE: style-src 'self' 'unsafe-inline'
-      CSP_FONT: "font-src 'self' data:"
-      CSP_CONNECT: connect-src 'self'
-      CSP_FRAME: frame-src 'self'
-      CSP_OBJECT: object-src 'self'
+      CSP_DEFAULT: "'self'"
+      CSP_SCRIPT: "'self' 'unsafe-inline' 'unsafe-eval'"
+      CSP_IMG: "'self' data: blob:"
+      CSP_STYLE: "'self' 'unsafe-inline'"
+      CSP_FONT: "'self' data:"
+      CSP_CONNECT: "'self'"
+      CSP_FRAME: "'self'"
+      CSP_OBJECT: "'self'"
       PROXY_READ_TIMEOUT: 21600s
     volumes:
       - media:/srv/media:ro
