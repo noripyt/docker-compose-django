@@ -4,8 +4,8 @@ include:
 services:
   nginx:
     labels:
-      traefik.http.routers.nginx.entrypoints: websecure
-      traefik.http.routers.nginx.tls.certresolver: letsencrypt
+      - traefik.http.routers.$PROJECT-nginx.entrypoints=websecure
+      - traefik.http.routers.$PROJECT-nginx.tls.certresolver=letsencrypt
   traefik:
     command:
       - "--providers.docker=true"

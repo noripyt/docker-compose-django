@@ -192,8 +192,8 @@ services:
           cpus: "0.1"
           memory: 6M
     labels:
-      traefik.enable: true
-      traefik.http.routers.nginx.rule: Host(`www.$DOMAIN`, `$DOMAIN`)
+      - traefik.enable=true
+      - traefik.http.routers.$PROJECT-nginx.rule=Host(`www.$DOMAIN`, `$DOMAIN`)
   traefik:
     image: traefik:2.11.4
     container_name: traefik
@@ -287,6 +287,6 @@ services:
           cpus: "0.1"
           memory: 50M
     labels:
-      ofelia.job-local.restart-unhealthy-containers.schedule: "@every 10s"
-      ofelia.job-local.restart-unhealthy-containers.command: "sh -c 'docker ps -q -f health=unhealthy | xargs --no-run-if-empty docker restart'"
-      ofelia.job-local.restart-unhealthy-containers.no-overlap: "true"
+      - ofelia.job-local.$PROJECT-restart-unhealthy-containers.schedule=@every 10s
+      - ofelia.job-local.$PROJECT-restart-unhealthy-containers.command=sh -c 'docker ps -q -f health=unhealthy | xargs --no-run-if-empty docker restart'
+      - ofelia.job-local.$PROJECT-restart-unhealthy-containers.no-overlap=true

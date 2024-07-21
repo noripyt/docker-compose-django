@@ -1,7 +1,7 @@
 services:
   nginx:
     labels:
-      traefik.http.routers.nginx.entrypoints: web
+      - traefik.http.routers.$PROJECT-nginx.entrypoints=web
   traefik:
     command:
       - "--api.dashboard=true"
