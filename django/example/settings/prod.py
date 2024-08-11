@@ -15,3 +15,6 @@ TEMPLATES[0]['OPTIONS']['loaders'] = [  # type: ignore[index]
     ),
 ]
 del TEMPLATES[0]['APP_DIRS']
+
+
+EMAIL_SUBJECT_PREFIX = ''
