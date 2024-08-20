@@ -21,6 +21,7 @@ USER django
 
 ARG PROJECT
 ARG DJANGO_ROOT
+ARG DJANGO_EXTRA_PIP_ARGS
 ARG DJANGO_COLLECTSTATIC_ARGS
 ARG DJANGO_POST_INSTALL_RUN
 ARG DJANGO_SETTINGS_MODULE
@@ -34,7 +35,7 @@ ENV PATH="$PATH:/srv/.local/bin" \
     DOMAIN=${DOMAIN}
 
 COPY --chown=django ${DJANGO_ROOT}/requirements/* requirements/
-RUN python3 -m pip install --no-cache-dir -r requirements/base.txt -r requirements/prod.txt
+RUN python3 -m pip install --no-cache-dir -r requirements/base.txt -r requirements/prod.txt ${DJANGO_EXTRA_PIP_ARGS}
 RUN if [ "$DJANGO_SETTINGS_MODULE" = "${PROJECT}.settings.dev" ] ; then python3 -m pip install --no-cache-dir -r requirements/dev.txt ; fi
 
 COPY --chown=django ${DJANGO_ROOT} /srv
