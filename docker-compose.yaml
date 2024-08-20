@@ -153,6 +153,7 @@ services:
       CSP_FONT: "'self' data:"
       CSP_CONNECT: "'self'"
       CSP_FRAME: "'self'"
+      CSP_FRAME_ANCESTORS: "'self'"
       CSP_OBJECT: "'self'"
       PROXY_READ_TIMEOUT: 21600s
     volumes:
