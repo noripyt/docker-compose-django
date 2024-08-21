@@ -279,6 +279,9 @@ services:
     read_only: true
     # TODO: Add a health check.
     restart: unless-stopped
+    depends_on:
+      traefik:
+        condition: service_healthy
     cap_drop:
       - ALL
     deploy:
