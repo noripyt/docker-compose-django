@@ -252,6 +252,7 @@ services:
       - fail2ban:/var/lib/fail2ban
       - /var/log/auth.log:/var/log/auth.log:ro
       - nginx-logs:/var/log/nginx:ro
+    # TODO: Make the container read-only
     healthcheck:
       test: [ "CMD", "fail2ban-client", "ping" ]
       interval: 10s

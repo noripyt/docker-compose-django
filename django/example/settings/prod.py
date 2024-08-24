@@ -18,3 +18,4 @@ del TEMPLATES[0]['APP_DIRS']
 
 
 EMAIL_SUBJECT_PREFIX = ''
+EMAIL_HOST_USER = 'noreply@example.com'
