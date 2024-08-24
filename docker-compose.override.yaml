@@ -1,7 +1,33 @@
 services:
+  migrate:
+    read_only: false
+    develop:
+      watch:
+        - action: sync+restart
+          path: ${DJANGO_ROOT}
+          target: /srv
+          ignore:
+            - ${DJANGO_ROOT}/requirements/
+  django:
+    command: python manage.py runserver django:8000
+    read_only: false
+    develop:
+      watch:
+        - action: sync
+          path: ${DJANGO_ROOT}
+          target: /srv
+          ignore:
+            - ${DJANGO_ROOT}/requirements/
+        - action: rebuild
+          path: ${DJANGO_ROOT}/requirements
   nginx:
     labels:
       - traefik.http.routers.$PROJECT-nginx.entrypoints=web
+    develop:
+      watch:
+        - action: rebuild
+          path: ${NGINX_ROOT}
+          # TODO: Watch changes in Django static files, including dependencies.
   traefik:
     command:
       - "--api.dashboard=true"
@@ -16,3 +42,8 @@ services:
       traefik.http.routers.traefik.rule: Host(`$DOMAIN`)
       traefik.http.routers.traefik.service: api@internal
       traefik.http.routers.traefik.entrypoints: traefik
+  fail2ban:
+    develop:
+      watch:
+        - action: rebuild
+          path: ./fail2ban
