@@ -1,32 +1,23 @@
 services:
-  migrate:
-    read_only: false
-    develop:
-      watch:
-        - action: sync+restart
-          path: ${DJANGO_ROOT}
-          target: /srv
-          ignore:
-            - ${DJANGO_ROOT}/requirements/
   django:
     command: python manage.py runserver django:8000
     read_only: false
     develop:
       watch:
         - action: sync
-          path: ${DJANGO_ROOT}
+          path: ${WATCH_RELATIVE_ROOT}/${DJANGO_ROOT}
           target: /srv
           ignore:
-            - ${DJANGO_ROOT}/requirements/
+            - ${WATCH_RELATIVE_ROOT}/${DJANGO_ROOT}/requirements/
         - action: rebuild
-          path: ${DJANGO_ROOT}/requirements
+          path: ${WATCH_RELATIVE_ROOT}/${DJANGO_ROOT}/requirements
   nginx:
     labels:
       - traefik.http.routers.$PROJECT-nginx.entrypoints=web
     develop:
       watch:
         - action: rebuild
-          path: ${NGINX_ROOT}
+          path: ${WATCH_RELATIVE_ROOT}/${NGINX_ROOT}
           # TODO: Watch changes in Django static files, including dependencies.
   traefik:
     command:
