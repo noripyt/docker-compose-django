@@ -76,6 +76,14 @@ services:
           memory: 2500M
         reservations:
           memory: 100M
+    # TODO: Move to docker-compose.override.yaml when Compose properly extends `watch`.
+    develop:
+      watch:
+        - action: sync+restart
+          path: ${DJANGO_ROOT}
+          target: /srv
+          ignore:
+            - ${DJANGO_ROOT}/requirements/
   django:
     build:
       context: .
@@ -127,6 +135,16 @@ services:
         reservations:
           cpus: "0.1"
           memory: 500M
+    # TODO: Move to docker-compose.override.yaml when Compose properly extends `watch`.
+    develop:
+      watch:
+        - action: sync
+          path: ${DJANGO_ROOT}
+          target: /srv
+          ignore:
+            - ${DJANGO_ROOT}/requirements/
+        - action: rebuild
+          path: ${DJANGO_ROOT}/requirements
   nginx:
     build:
       context: .
@@ -203,6 +221,12 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.$PROJECT-nginx.rule=Host(`www.$DOMAIN`, `$DOMAIN`)
+    # TODO: Move to docker-compose.override.yaml when Compose properly extends `watch`.
+    develop:
+      watch:
+        - action: rebuild
+          path: ${NGINX_ROOT}
+          # TODO: Watch changes in Django static files, including dependencies.
   traefik:
     image: traefik:2.11.4
     container_name: traefik
@@ -276,6 +300,11 @@ services:
         reservations:
           cpus: "0.1"
           memory: 30M
+    # TODO: Move to docker-compose.override.yaml when Compose properly extends `watch`.
+    develop:
+      watch:
+        - action: rebuild
+          path: ./fail2ban
   ofelia:
     build:
       context: ofelia
