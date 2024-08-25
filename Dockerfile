@@ -1,15 +1,17 @@
 ARG DJANGO_BASE_IMAGE
-FROM ${DJANGO_BASE_IMAGE} AS django
+ARG DJANGO_NODE_BUILD
+FROM ${DJANGO_BASE_IMAGE} AS django_without_node
 
 ENV DEBIAN_FRONTEND="noninteractive"
 
 ARG DJANGO_PRE_INSTALL_RUN
 ARG DJANGO_APT_DEPENDENCIES
+ARG DJANGO_NODE_BUILD
 RUN apt-get update -y --quiet \
     && sh -c "${DJANGO_PRE_INSTALL_RUN}"  \
-    && if [ "${DJANGO_APT_DEPENDENCIES}" != "" ] ; then  \
-    apt-get install -y --no-install-recommends ${DJANGO_APT_DEPENDENCIES} \
-    ; fi \
+    && apt-get install -y --no-install-recommends \
+    `if [ "${DJANGO_NODE_BUILD}" = "django_with_node" ] ; then echo "npm" ; fi` \
+    ${DJANGO_APT_DEPENDENCIES} \
     && rm -rf \
     /var/lib/apt/lists/* /var/cache/apt/archives/* /usr/share/doc/* \
     /usr/share/man/* /usr/share/info/* /usr/share/lintian/* /tmp/*
@@ -18,6 +20,13 @@ RUN adduser --disabled-password --gecos "" --home /srv --no-create-home django
 WORKDIR /srv
 RUN chown -R django:django /srv
 USER django
+
+FROM django_without_node AS django_with_node
+
+ONBUILD COPY --chown=django ${DJANGO_ROOT}/package*.json /srv
+ONBUILD RUN npm install
+
+FROM ${DJANGO_NODE_BUILD} AS django
 
 ARG PROJECT
 ARG DJANGO_ROOT
