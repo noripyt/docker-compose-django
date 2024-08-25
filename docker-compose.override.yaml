@@ -5,19 +5,19 @@ services:
     develop:
       watch:
         - action: sync
-          path: ${WATCH_RELATIVE_ROOT}/${DJANGO_ROOT}
+          path: ${WATCH_RELATIVE_ROOT:-.}/${DJANGO_ROOT}
           target: /srv
           ignore:
-            - ${WATCH_RELATIVE_ROOT}/${DJANGO_ROOT}/requirements/
+            - ${WATCH_RELATIVE_ROOT:-.}/${DJANGO_ROOT}/requirements/
         - action: rebuild
-          path: ${WATCH_RELATIVE_ROOT}/${DJANGO_ROOT}/requirements
+          path: ${WATCH_RELATIVE_ROOT:-.}/${DJANGO_ROOT}/requirements
   nginx:
     labels:
       - traefik.http.routers.$PROJECT-nginx.entrypoints=web
     develop:
       watch:
         - action: rebuild
-          path: ${WATCH_RELATIVE_ROOT}/${NGINX_ROOT}
+          path: ${WATCH_RELATIVE_ROOT:-.}/${NGINX_ROOT}
           # TODO: Watch changes in Django static files, including dependencies.
   traefik:
     command:
