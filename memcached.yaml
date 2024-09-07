@@ -1,0 +1,28 @@
+services:
+  memcached:
+    image: memcached:1.6.22-alpine
+    user: memcache
+    # Allocate up to 2 GB of RAM and run using a UNIX socket (faster).
+    command: [ "memcached", "-m", "2000", "--unix-socket", "/tmp/memcached.sock", "--unix-mask", "766" ]
+    volumes:
+      - memcached-socket:/tmp
+    network_mode: none
+    read_only: true
+    healthcheck:
+      test: nc -z -w1 local:/tmp/memcached.sock
+      interval: 1s
+      timeout: 1s
+      retries: 60
+    restart: unless-stopped
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 2500M
+        reservations:
+          memory: 100M
+
+volumes:
+  memcached-socket:

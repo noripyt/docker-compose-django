@@ -1,6 +1,7 @@
 include:
   - networks.yaml
   - volumes.yaml
+  - memcached.yaml
 
 
 services:
