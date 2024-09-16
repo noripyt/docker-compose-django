@@ -1,6 +1,9 @@
 networks:
   internal:
     enable_ipv6: true
+  traefik:
+    enable_ipv6: true
+    name: "traefik"
     ipam:
       config:
         - subnet: $IPV4_SUBNET

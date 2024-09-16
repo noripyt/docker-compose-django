@@ -171,6 +171,7 @@ services:
       - nginx-logs:/var/log/nginx
     networks:
       internal:
+      traefik:
     read_only: true
     tmpfs:
       - /var/cache/nginx/
@@ -215,7 +216,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
-      internal:
+      traefik:
     read_only: true
     healthcheck:
       test: nc -z -w1 traefik 80
