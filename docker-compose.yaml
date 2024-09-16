@@ -60,7 +60,7 @@ services:
       - postgresql-socket:/var/run/postgresql
       - media:/srv/media
     networks:
-      default:
+      internal:
     read_only: true
     tmpfs:
       - /tmp/
@@ -103,7 +103,7 @@ services:
     tmpfs:
       - /tmp/
     networks:
-      default:
+      internal:
     read_only: true
     expose:
       - 8000
@@ -170,7 +170,7 @@ services:
       - media:/srv/media:ro
       - nginx-logs:/var/log/nginx
     networks:
-      default:
+      internal:
     read_only: true
     tmpfs:
       - /var/cache/nginx/
@@ -215,7 +215,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
-      default:
+      internal:
     read_only: true
     healthcheck:
       test: nc -z -w1 traefik 80

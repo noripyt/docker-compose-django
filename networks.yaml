@@ -1,5 +1,5 @@
 networks:
-  default:
+  internal:
     enable_ipv6: true
     ipam:
       config:
