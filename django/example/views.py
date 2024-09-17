@@ -15,11 +15,11 @@ def slow_view(request):
         <!DOCTYPE html>
         <html>
             <body>
-            <h1>docker-compose-django example project</h1>
-            <p>Slow example view, to test DDoS attacks.</p>
-            <h2>Request metadata</h2>
-            <p>Guessed client IP: {get_client_ip(request)}</p>
-            <p>{'</p><p>'.join(f'{k}: {v}' for k, v in sorted(request.META.items()))}</p>
+                <h1>docker-compose-django example project</h1>
+                <p>Slow example view, to test DDoS attacks.</p>
+                <h2>Request metadata</h2>
+                <p>Guessed client IP: {get_client_ip(request)}</p>
+                <p>{'</p><p>'.join(f'{k}: {v}' for k, v in sorted(request.META.items()))}</p>
             </body>
         </html>
     """, content_type='text/html')
