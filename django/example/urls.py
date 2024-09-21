@@ -18,7 +18,6 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from django.urls import path
-from debug_toolbar.toolbar import debug_toolbar_urls
 
 from .sitemaps import StaticViewSitemap
 from .views import slow_view
@@ -38,6 +37,7 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
+    from debug_toolbar.toolbar import debug_toolbar_urls
     urlpatterns = [
         *urlpatterns,
         *debug_toolbar_urls(),
