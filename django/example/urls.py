@@ -16,14 +16,25 @@ Including another URLconf
 """
 from django.conf import settings
 from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap
 from django.urls import path
 from debug_toolbar.toolbar import debug_toolbar_urls
 
+from .sitemaps import StaticViewSitemap
 from .views import slow_view
 
+sitemaps = {
+    "static": StaticViewSitemap,
+}
+
 urlpatterns = [
-    path('', slow_view),
+    path('', slow_view, name='slow'),
     path('admin/', admin.site.urls),
+    path(
+        'sitemap.xml',
+        sitemap,
+        {'sitemaps': sitemaps},
+    )
 ]
 
 if settings.DEBUG:
