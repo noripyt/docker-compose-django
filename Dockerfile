@@ -57,7 +57,7 @@ ENV PYTHONUNBUFFERED=true
 CMD gunicorn $PROJECT.wsgi:application -b django:8000 --workers $((2 * $DJANGO_CPUS + 1)) -t 86400
 
 
-FROM nginx:1.26.1-alpine-slim AS nginx
+FROM nginx:1.26.2-alpine-slim AS nginx
 
 ARG PROJECT
 ARG NGINX_ROOT

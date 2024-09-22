@@ -5,7 +5,7 @@ include:
 
 services:
   postgresql:
-    image: postgres:16.3-alpine
+    image: postgres:16.4-alpine
     user: postgres
     environment:
       # We have to redefine POSTGRES_DB and POSTGRES_USER as themselves due to this: https://docs.docker.com/compose/environment-variables/envvars-precedence/
@@ -82,7 +82,7 @@ services:
       target: django
       args:
         PROJECT: $PROJECT
-        DJANGO_BASE_IMAGE: ${DJANGO_BASE_IMAGE:-python:3.12.3-slim-bookworm}
+        DJANGO_BASE_IMAGE: ${DJANGO_BASE_IMAGE:-python:3.12.6-slim-bookworm}
         DJANGO_PRE_INSTALL_RUN: ${DJANGO_PRE_INSTALL_RUN:-}
         DJANGO_APT_DEPENDENCIES: ${DJANGO_APT_DEPENDENCIES:-}
         DJANGO_NODE_BUILD: ${DJANGO_NODE_BUILD:-django_without_node}
@@ -134,7 +134,7 @@ services:
       target: nginx
       args:
         PROJECT: $PROJECT
-        DJANGO_BASE_IMAGE: ${DJANGO_BASE_IMAGE:-python:3.12.3-slim-bookworm}
+        DJANGO_BASE_IMAGE: ${DJANGO_BASE_IMAGE:-python:3.12.6-slim-bookworm}
         DJANGO_PRE_INSTALL_RUN: ${DJANGO_PRE_INSTALL_RUN:-}
         DJANGO_APT_DEPENDENCIES: ${DJANGO_APT_DEPENDENCIES:-}
         DJANGO_NODE_BUILD: ${DJANGO_NODE_BUILD:-django_without_node}
@@ -207,7 +207,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.$PROJECT-nginx.rule=Host(`www.$DOMAIN`, `$DOMAIN`)
   traefik:
-    image: traefik:2.11.4
+    image: traefik:2.11.10
     container_name: traefik
     environment:
       TZ: $TZ
