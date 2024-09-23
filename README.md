@@ -20,4 +20,5 @@ Assuming you use the latest Debian version.
   SystemMaxUse=250M
   ```
   then restart it with `systemctl restart systemd-journald`
-- `touch /var/log/auth.log` (otherwise Fail2ban will crash in a loop)
+- For Debian >= 12: `apt install rsyslog`, otherwise Fail2ban cannot access auth.log. See https://unix.stackexchange.com/a/636689
+  > FIXME: Make Fail2ban work with the host journalctl. 
