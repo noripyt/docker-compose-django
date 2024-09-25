@@ -1,8 +1,4 @@
-import os
-
 from .base import *
-
-ALLOWED_HOSTS = [os.environ['DOMAIN'], 'django']
 
 
 TEMPLATES[0]['OPTIONS']['loaders'] = [  # type: ignore[index]

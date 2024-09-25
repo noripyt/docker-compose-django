@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 from django.utils.log import DEFAULT_LOGGING
@@ -26,7 +27,9 @@ SECRET_KEY = 'django-insecure-*rl#)!c(9x1rp$0jk+v3yizz-l8g!x&(u3%bold3at!-pq^=cd
 
 DEBUG = False
 
-ALLOWED_HOSTS = []
+DOMAIN = os.environ.get('DOMAIN', 'localhost')
+ALLOWED_HOSTS = [DOMAIN, 'django']
+CSRF_TRUSTED_ORIGINS = [f'https://{DOMAIN}']
 
 
 # Application definition
@@ -38,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
 ]
 
 MIDDLEWARE = [

@@ -6,7 +6,7 @@ include:
 
 services:
   postgresql:
-    image: postgres:16.3-alpine
+    image: postgres:16.4-alpine
     user: postgres
     environment:
       # We have to redefine POSTGRES_DB and POSTGRES_USER as themselves due to this: https://docs.docker.com/compose/environment-variables/envvars-precedence/
@@ -61,7 +61,7 @@ services:
       - postgresql-socket:/var/run/postgresql
       - media:/srv/media
     networks:
-      default:
+      internal:
     read_only: true
     tmpfs:
       - /tmp/
@@ -83,7 +83,7 @@ services:
       target: django
       args:
         PROJECT: $PROJECT
-        DJANGO_BASE_IMAGE: ${DJANGO_BASE_IMAGE:-python:3.12.3-slim-bookworm}
+        DJANGO_BASE_IMAGE: ${DJANGO_BASE_IMAGE:-python:3.12.6-slim-bookworm}
         DJANGO_PRE_INSTALL_RUN: ${DJANGO_PRE_INSTALL_RUN:-}
         DJANGO_APT_DEPENDENCIES: ${DJANGO_APT_DEPENDENCIES:-}
         DJANGO_NODE_BUILD: ${DJANGO_NODE_BUILD:-django_without_node}
@@ -104,15 +104,15 @@ services:
     tmpfs:
       - /tmp/
     networks:
-      default:
+      internal:
     read_only: true
     expose:
       - 8000
     healthcheck:
       test: python3 -c "import urllib.request; urllib.request.urlopen('http://django:8000${DJANGO_HEALTHCHECK_URL:-/}')"
-      interval: 10s
-      timeout: 10s
-      retries: 12
+      interval: 60s
+      timeout: 60s
+      retries: 3
     restart: unless-stopped
     depends_on:
       postgresql:
@@ -135,7 +135,7 @@ services:
       target: nginx
       args:
         PROJECT: $PROJECT
-        DJANGO_BASE_IMAGE: ${DJANGO_BASE_IMAGE:-python:3.12.3-slim-bookworm}
+        DJANGO_BASE_IMAGE: ${DJANGO_BASE_IMAGE:-python:3.12.6-slim-bookworm}
         DJANGO_PRE_INSTALL_RUN: ${DJANGO_PRE_INSTALL_RUN:-}
         DJANGO_APT_DEPENDENCIES: ${DJANGO_APT_DEPENDENCIES:-}
         DJANGO_NODE_BUILD: ${DJANGO_NODE_BUILD:-django_without_node}
@@ -171,7 +171,8 @@ services:
       - media:/srv/media:ro
       - nginx-logs:/var/log/nginx
     networks:
-      default:
+      internal:
+      traefik:
     read_only: true
     tmpfs:
       - /var/cache/nginx/
@@ -207,7 +208,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.$PROJECT-nginx.rule=Host(`www.$DOMAIN`, `$DOMAIN`)
   traefik:
-    image: traefik:2.11.4
+    image: traefik:2.11.10
     container_name: traefik
     environment:
       TZ: $TZ
@@ -216,7 +217,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
-      default:
+      traefik:
     read_only: true
     healthcheck:
       test: nc -z -w1 traefik 80

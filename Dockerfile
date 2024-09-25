@@ -57,10 +57,11 @@ ENV PYTHONUNBUFFERED=true
 CMD gunicorn $PROJECT.wsgi:application -b django:8000 --workers $((2 * $DJANGO_CPUS + 1)) -t 86400
 
 
-FROM nginx:1.26.1-alpine-slim AS nginx
+FROM nginx:1.26.2-alpine-slim AS nginx
 
 ARG PROJECT
 ARG NGINX_ROOT
+ARG DOMAIN
 
 RUN sed -i "s|/var/log/nginx/|/var/log/nginx/${PROJECT}.|g" /etc/nginx/nginx.conf  \
     && grep -q "/var/log/nginx/${PROJECT}." /etc/nginx/nginx.conf \
@@ -72,4 +73,9 @@ RUN sed -i "s|/var/log/nginx/|/var/log/nginx/${PROJECT}.|g" /etc/nginx/nginx.con
 
 COPY --chown=nginx ${NGINX_ROOT}/templates /etc/nginx/templates
 COPY --chown=nginx ${NGINX_ROOT} /srv/nginx
+# FIXME: Replace with passing --exclude=${NGINX_ROOT}/templates/ above.
+RUN rm -rf /srv/nginx/templates
+
+RUN DOMAIN=${DOMAIN} envsubst < /srv/nginx/robots.txt.template > /srv/nginx/robots.txt && rm /srv/nginx/robots.txt.template
+
 COPY --from=django --chown=nginx /srv/static /srv/static
