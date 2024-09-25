@@ -103,7 +103,6 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
         'LOCATION': 'unix:/var/run/memcached/memcached.sock',
-        'KEY_PREFIX': 'example:',
     },
 }
 
