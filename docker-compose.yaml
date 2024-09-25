@@ -232,7 +232,7 @@ services:
           memory: 80M
         reservations:
           cpus: "0.1"
-          memory: 20M
+          memory: 6M
     labels:
       - traefik.enable=true
       - traefik.http.routers.$PROJECT-nginx.rule=Host(`www.$DOMAIN`, `$DOMAIN`)
