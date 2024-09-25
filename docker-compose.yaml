@@ -46,10 +46,10 @@ services:
       mode: global
       resources:
         limits:
-          memory: 100M
+          memory: 200M
         reservations:
           cpus: "0.1"
-          memory: 20M
+          memory: 50M
   memcached:
     image: memcached:1.6.31-alpine
     user: memcache
@@ -102,7 +102,7 @@ services:
         limits:
           memory: 500M
         reservations:
-          memory: 100M
+          memory: 150M
   django:
     build:
       context: .
@@ -154,10 +154,10 @@ services:
       resources:
         limits:
           cpus: "${DJANGO_CPUS:-1}"
-          memory: 600M
+          memory: 500M
         reservations:
           cpus: "0.1"
-          memory: 120M
+          memory: 150M
   nginx:
     build:
       context: .
@@ -229,7 +229,7 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: 100M
+          memory: 80M
         reservations:
           cpus: "0.1"
           memory: 20M
@@ -265,10 +265,10 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: 250M
+          memory: 200M
         reservations:
           cpus: "0.1"
-          memory: 50M
+          memory: 40M
     labels:
       traefik.enable: true
   fail2ban:
@@ -331,10 +331,10 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: 200M
+          memory: 150M
         reservations:
           cpus: "0.1"
-          memory: 40M
+          memory: 50M
     labels:
       - ofelia.job-local.$PROJECT-restart-unhealthy-containers.schedule=@every 60s
       - ofelia.job-local.$PROJECT-restart-unhealthy-containers.command=sh -c 'docker ps -q -f health=unhealthy -f name=${COMPOSE_PROJECT_NAME}- | xargs --no-run-if-empty docker restart'
