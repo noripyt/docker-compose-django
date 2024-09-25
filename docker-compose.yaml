@@ -1,7 +1,6 @@
 include:
   - networks.yaml
   - volumes.yaml
-  - memcached.yaml
 
 
 services:
@@ -47,10 +46,34 @@ services:
       mode: global
       resources:
         limits:
-          memory: 500M
+          memory: 100M
         reservations:
           cpus: "0.1"
-          memory: 50M
+          memory: 20M
+  memcached:
+    image: memcached:1.6.31-alpine
+    user: memcache
+    # Allocate up to 250 MB of RAM and run using a UNIX socket (faster).
+    command: [ "memcached", "-m", "250", "--unix-socket", "/tmp/memcached.sock", "--unix-mask", "766" ]
+    volumes:
+      - memcached-socket:/tmp
+    network_mode: none
+    read_only: true
+    healthcheck:
+      test: nc -z -w1 local:/tmp/memcached.sock
+      interval: 1s
+      timeout: 1s
+      retries: 60
+    restart: unless-stopped
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 260M
+        reservations:
+          memory: 6M
   migrate:
     image: $PROJECT/django:${IMAGES_TAG:-latest}
     user: django
@@ -59,6 +82,7 @@ services:
       TZ: $TZ
     volumes:
       - postgresql-socket:/var/run/postgresql
+      - memcached-socket:/var/run/memcached
       - media:/srv/media
     networks:
       internal:
@@ -69,12 +93,14 @@ services:
     depends_on:
       postgresql:
         condition: service_healthy
+      memcached:
+        condition: service_healthy
     cap_drop:
       - ALL
     deploy:
       resources:
         limits:
-          memory: 2500M
+          memory: 500M
         reservations:
           memory: 100M
   django:
@@ -100,6 +126,7 @@ services:
       TZ: $TZ
     volumes:
       - postgresql-socket:/var/run/postgresql
+      - memcached-socket:/var/run/memcached
       - media:/srv/media
     tmpfs:
       - /tmp/
@@ -117,6 +144,8 @@ services:
     depends_on:
       postgresql:
         condition: service_healthy
+      memcached:
+        condition: service_healthy
       migrate:
         condition: service_completed_successfully
     cap_drop:
@@ -125,10 +154,10 @@ services:
       resources:
         limits:
           cpus: "${DJANGO_CPUS:-1}"
-          memory: 4000M
+          memory: 600M
         reservations:
           cpus: "0.1"
-          memory: 500M
+          memory: 120M
   nginx:
     build:
       context: .
@@ -203,7 +232,7 @@ services:
           memory: 100M
         reservations:
           cpus: "0.1"
-          memory: 6M
+          memory: 20M
     labels:
       - traefik.enable=true
       - traefik.http.routers.$PROJECT-nginx.rule=Host(`www.$DOMAIN`, `$DOMAIN`)
@@ -236,7 +265,7 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: 500M
+          memory: 250M
         reservations:
           cpus: "0.1"
           memory: 50M
@@ -276,10 +305,10 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: 250M
+          memory: 100M
         reservations:
           cpus: "0.1"
-          memory: 30M
+          memory: 20M
   ofelia:
     build:
       context: ofelia
@@ -302,10 +331,10 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: 500M
+          memory: 200M
         reservations:
           cpus: "0.1"
-          memory: 50M
+          memory: 40M
     labels:
       - ofelia.job-local.$PROJECT-restart-unhealthy-containers.schedule=@every 60s
       - ofelia.job-local.$PROJECT-restart-unhealthy-containers.command=sh -c 'docker ps -q -f health=unhealthy -f name=${COMPOSE_PROJECT_NAME}- | xargs --no-run-if-empty docker restart'
