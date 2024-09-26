@@ -96,6 +96,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'example',
         'USER': 'example',
+        'CONN_MAX_AGE': None,
+        'CONN_HEALTH_CHECKS': True,
     }
 }
 
