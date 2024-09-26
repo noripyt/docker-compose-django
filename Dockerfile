@@ -9,7 +9,7 @@ ARG DJANGO_APT_DEPENDENCIES
 ARG DJANGO_NODE_BUILD
 RUN apt-get update -y --quiet \
     && sh -c "${DJANGO_PRE_INSTALL_RUN}"  \
-    && apt-get install -y --no-install-recommends \
+    && apt-get install -y --no-install-recommends build-essential libmemcached-dev zlib1g-dev \
     `if [ "${DJANGO_NODE_BUILD}" = "django_with_node" ] ; then echo "npm" ; fi` \
     ${DJANGO_APT_DEPENDENCIES} \
     && rm -rf \
