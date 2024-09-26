@@ -103,6 +103,12 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
         'LOCATION': 'unix:/var/run/memcached/memcached.sock',
+        'OPTIONS': {
+            'use_pooling': True,  # Keeps connections alive, more reliable with multiple threads per worker.
+            'default_noreply': True,  # Do not wait for a reply when we do not need it.
+            'connect_timeout': 10.0,  # seconds
+            'timeout': 10.0,  # seconds
+        },
     },
 }
 
