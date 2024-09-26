@@ -54,7 +54,7 @@ RUN mkdir /srv/media
 # Makes gunicorn display stdout & stderr as soon as they are printed.
 ENV PYTHONUNBUFFERED=true
 
-CMD gunicorn $PROJECT.wsgi:application -b django:8000 --workers $((2 * $DJANGO_CPUS + 1)) -t 86400
+CMD gunicorn $PROJECT.wsgi:application -b django:8000 --workers $DJANGO_CPUS --threads 8 -t 86400
 
 
 FROM nginx:1.26.2-alpine-slim AS nginx
