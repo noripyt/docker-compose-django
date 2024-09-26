@@ -101,8 +101,11 @@ DATABASES = {
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
-        'LOCATION': '/var/run/memcached/memcached.sock',
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'TIMEOUT': None,
+        'OPTIONS': {
+            'MAX_ENTRIES': 100000,
+        },
     },
 }
 
