@@ -12,7 +12,7 @@ services:
       POSTGRES_DB: $PROJECT
       POSTGRES_USER: $PROJECT
       POSTGRES_HOST_AUTH_METHOD: trust
-      POSTGRES_INITDB_ARGS: --locale-provider=icu --icu-locale=$POSTGRES_LOCALE
+      POSTGRES_INITDB_ARGS: --locale-provider=icu --icu-locale=$LOCALE
       LC_COLLATE: $LANG
       LC_CTYPE: $LANG
       LC_MESSAGES: $LANG
@@ -54,8 +54,6 @@ services:
     image: $PROJECT/django:${IMAGES_TAG:-latest}
     user: django
     command: python manage.py migrate
-    environment:
-      TZ: $TZ
     volumes:
       - postgresql-socket:/var/run/postgresql
       - media:/srv/media
@@ -93,10 +91,10 @@ services:
         DJANGO_SETTINGS_MODULE: $DJANGO_SETTINGS_MODULE
         DJANGO_CPUS: ${DJANGO_CPUS:-1}
         DOMAIN: $DOMAIN
+        TZ: $TZ
+        LOCALE: $LOCALE
     image: $PROJECT/django:${IMAGES_TAG:-latest}
     user: django
-    environment:
-      TZ: $TZ
     volumes:
       - postgresql-socket:/var/run/postgresql
       - media:/srv/media
@@ -146,6 +144,8 @@ services:
         DJANGO_CPUS: ${DJANGO_CPUS:-1}
         NGINX_ROOT: ${NGINX_ROOT}
         DOMAIN: $DOMAIN
+        TZ: $TZ
+        LOCALE: $LOCALE
     image: $PROJECT/nginx:${IMAGES_TAG:-latest}
     environment:
       # We have to redefine some variables as themselves due to this: https://docs.docker.com/compose/environment-variables/envvars-precedence/

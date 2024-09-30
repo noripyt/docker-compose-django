@@ -36,12 +36,16 @@ ARG DJANGO_POST_INSTALL_RUN
 ARG DJANGO_SETTINGS_MODULE
 ARG DJANGO_CPUS
 ARG DOMAIN
+ARG TZ
+ARG LOCALE
 
 ENV PATH="$PATH:/srv/.local/bin" \
     PROJECT=${PROJECT} \
     DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE} \
     DJANGO_CPUS=${DJANGO_CPUS} \
-    DOMAIN=${DOMAIN}
+    DOMAIN=${DOMAIN} \
+    TZ=${TZ} \
+    LOCALE=${LOCALE}
 
 COPY --chown=django ${DJANGO_ROOT}/requirements/* requirements/
 RUN python3 -m pip install --no-cache-dir -r requirements/base.txt -r requirements/prod.txt ${DJANGO_EXTRA_PIP_ARGS}

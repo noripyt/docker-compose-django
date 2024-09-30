@@ -1,5 +1,4 @@
 from ipaddress import ip_interface
-import os
 import socket
 
 from .base import *
