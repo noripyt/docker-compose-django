@@ -33,7 +33,7 @@ ARG DJANGO_ROOT
 ARG DJANGO_EXTRA_PIP_ARGS
 ARG DJANGO_COLLECTSTATIC_ARGS
 ARG DJANGO_POST_INSTALL_RUN
-ARG DJANGO_SETTINGS_MODULE
+ARG DJANGO_ENVIRONMENT
 ARG DJANGO_CPUS
 ARG DOMAIN
 ARG TZ
@@ -41,15 +41,16 @@ ARG LOCALE
 
 ENV PATH="$PATH:/srv/.local/bin" \
     PROJECT=${PROJECT} \
-    DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE} \
+    DJANGO_ENVIRONMENT=${DJANGO_ENVIRONMENT} \
     DJANGO_CPUS=${DJANGO_CPUS} \
     DOMAIN=${DOMAIN} \
     TZ=${TZ} \
     LOCALE=${LOCALE}
 
 COPY --chown=django ${DJANGO_ROOT}/requirements/* requirements/
-RUN python3 -m pip install --no-cache-dir -r requirements/base.txt -r requirements/prod.txt ${DJANGO_EXTRA_PIP_ARGS}
-RUN if [ "$DJANGO_SETTINGS_MODULE" = "${PROJECT}.settings.dev" ] ; then python3 -m pip install --no-cache-dir -r requirements/dev.txt ; fi
+RUN python3 -m pip install --no-cache-dir -r requirements/base.txt ${DJANGO_EXTRA_PIP_ARGS}
+RUN if [ "$DJANGO_ENVIRONMENT" = "dev" ] ; then python3 -m pip install --no-cache-dir -r requirements/dev.txt ; \
+    else python3 -m pip install --no-cache-dir -r requirements/prod.txt ; fi
 
 COPY --chown=django ${DJANGO_ROOT} /srv
 RUN python3 manage.py collectstatic --no-input ${DJANGO_COLLECTSTATIC_ARGS} && sh -c "${DJANGO_POST_INSTALL_RUN}"

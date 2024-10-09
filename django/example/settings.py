@@ -10,13 +10,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+from ipaddress import ip_interface
 import os
 from pathlib import Path
+import socket
 
 from django.utils.log import DEFAULT_LOGGING
 
+from . import constants
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-*rl#)!c(9x1rp$0jk+v3yizz-l8g!x&(u3%bold3at!-pq^=cd'
 
-DEBUG = False
+DEBUG = constants.DJANGO_ENVIRONMENT == 'dev'
 
 DOMAIN = os.environ.get('DOMAIN', 'localhost')
 ALLOWED_HOSTS = [DOMAIN, 'django']
@@ -60,13 +64,22 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
-        'APP_DIRS': True,
+        'APP_DIRS': DEBUG,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+            ],
+            'loaders': None if DEBUG else [
+                (
+                    'django.template.loaders.cached.Loader',
+                    [
+                        'django.template.loaders.filesystem.Loader',
+                        'django.template.loaders.app_directories.Loader',
+                    ],
+                ),
             ],
         },
     },
@@ -152,3 +165,23 @@ STATIC_ROOT = BASE_DIR / 'static'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_HOST_USER = 'noreply@example.com'
+DEFAULT_FROM_EMAIL = (
+    f'Example <{EMAIL_HOST_USER}>' if constants.DJANGO_ENVIRONMENT == 'prod'
+    else f'Example {constants.DJANGO_ENVIRONMENT} <{EMAIL_HOST_USER}>'
+)
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+EMAIL_SUBJECT_PREFIX = ''
+
+if DEBUG:
+    INSTALLED_APPS.append('debug_toolbar')
+
+    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+
+    INTERNAL_IPS = ['127.0.0.1']
+    try:
+        DOCKER_INTERNAL_SUBNET = ip_interface(f"{socket.gethostbyname('django')}/255.255.0.0").network
+        INTERNAL_IPS.extend([str(ip) for ip in DOCKER_INTERNAL_SUBNET])
+    except socket.gaierror:
+        pass
