@@ -23,3 +23,7 @@ services:
       - letsencrypt:/letsencrypt
     healthcheck:
       test: nc -z -w1 traefik 443
+
+
+volumes:
+  letsencrypt:

@@ -291,3 +291,24 @@ services:
       - ofelia.job-local.$PROJECT-restart-unhealthy-containers.schedule=@every 60s
       - ofelia.job-local.$PROJECT-restart-unhealthy-containers.command=sh -c 'docker ps -q -f health=unhealthy -f name=${COMPOSE_PROJECT_NAME}- | xargs --no-run-if-empty docker restart'
       - ofelia.job-local.$PROJECT-restart-unhealthy-containers.no-overlap=true
+
+
+volumes:
+  postgresql:
+  postgresql-socket:
+  media:
+  nginx-logs:
+    name: "nginx-logs"  # That way, no project prefix.
+  fail2ban:
+
+
+networks:
+  internal:
+    enable_ipv6: true
+  traefik:
+    enable_ipv6: true
+    name: "traefik"
+    ipam:
+      config:
+        - subnet: $IPV4_SUBNET
+        - subnet: $IPV6_SUBNET
