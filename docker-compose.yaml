@@ -78,7 +78,7 @@ services:
     build:
       context: .
       target: django
-      args:
+      args: &django-build-args
         PROJECT: $PROJECT
         DJANGO_BASE_IMAGE: ${DJANGO_BASE_IMAGE:-python:3.12.6-slim-bookworm}
         DJANGO_PRE_INSTALL_RUN: ${DJANGO_PRE_INSTALL_RUN:-}
@@ -131,21 +131,8 @@ services:
       context: .
       target: nginx
       args:
-        PROJECT: $PROJECT
-        DJANGO_BASE_IMAGE: ${DJANGO_BASE_IMAGE:-python:3.12.6-slim-bookworm}
-        DJANGO_PRE_INSTALL_RUN: ${DJANGO_PRE_INSTALL_RUN:-}
-        DJANGO_APT_DEPENDENCIES: ${DJANGO_APT_DEPENDENCIES:-}
-        DJANGO_NODE_BUILD: ${DJANGO_NODE_BUILD:-django_without_node}
-        DJANGO_ROOT: ${DJANGO_ROOT}
-        DJANGO_EXTRA_PIP_ARGS: ${DJANGO_EXTRA_PIP_ARGS:-}
-        DJANGO_COLLECTSTATIC_ARGS: ${DJANGO_COLLECTSTATIC_ARGS:-}
-        DJANGO_POST_INSTALL_RUN: ${DJANGO_POST_INSTALL_RUN:-}
-        DJANGO_ENVIRONMENT: $DJANGO_ENVIRONMENT
-        DJANGO_CPUS: ${DJANGO_CPUS:-1}
+        <<: *django-build-args
         NGINX_ROOT: ${NGINX_ROOT}
-        DOMAIN: $DOMAIN
-        TZ: $TZ
-        LOCALE: $LOCALE
     image: $PROJECT/nginx:${IMAGES_TAG:-latest}
     environment:
       # We have to redefine some variables as themselves due to this: https://docs.docker.com/compose/environment-variables/envvars-precedence/
