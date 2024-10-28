@@ -1,13 +1,11 @@
 include:
   - path: networks.yaml
-    env_file:
+    env_file: &env_files
       - .env.base
       - .env.dev
-  - path: volumes.yaml
-    env_file:
-      - .env.base
-      - .env.dev
-  - path: services.dev.yaml
-    env_file:
-      - .env.base
-      - .env.dev
+  - path: volumes.base.yaml
+    env_file: *env_files
+  - path:
+      - services.base.yaml
+      - services.dev.yaml
+    env_file: *env_files

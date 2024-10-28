@@ -1,27 +1,9 @@
 services:
-  postgresql:
-    extends:
-      file: services.base.yaml
-      service: postgresql
-  migrate:
-    extends:
-      file: services.base.yaml
-      service: migrate
-  django:
-    extends:
-      file: services.base.yaml
-      service: django
   nginx:
-    extends:
-      file: services.base.yaml
-      service: nginx
     labels:
       - traefik.http.routers.$PROJECT-nginx.entrypoints=websecure
       - traefik.http.routers.$PROJECT-nginx.tls.certresolver=letsencrypt
   traefik:
-    extends:
-      file: services.base.yaml
-      service: traefik
     command:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
@@ -41,11 +23,3 @@ services:
       - letsencrypt:/letsencrypt
     healthcheck:
       test: nc -z -w1 traefik 443
-  fail2ban:
-    extends:
-      file: services.base.yaml
-      service: fail2ban
-  ofelia:
-    extends:
-      file: services.base.yaml
-      service: ofelia
