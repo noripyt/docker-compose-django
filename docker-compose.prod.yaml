@@ -2,12 +2,12 @@ include:
   - path: networks.yaml
     env_file:
       - .env.base
-      - .env.dev
-  - path: volumes.yaml
+      - .env.prod
+  - path: volumes.deployment.yaml
     env_file:
       - .env.base
-      - .env.dev
-  - path: services.dev.yaml
+      - .env.prod
+  - path: services.deployment.yaml
     env_file:
       - .env.base
-      - .env.dev
+      - .env.prod

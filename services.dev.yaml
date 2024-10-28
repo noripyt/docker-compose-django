@@ -1,5 +1,16 @@
 services:
+  postgresql:
+    extends:
+      file: services.base.yaml
+      service: postgresql
+  migrate:
+    extends:
+      file: services.base.yaml
+      service: migrate
   django:
+    extends:
+      file: services.base.yaml
+      service: django
     command: python manage.py runserver django:8000
     read_only: false
     develop:
@@ -12,6 +23,9 @@ services:
         - action: rebuild
           path: ${WATCH_RELATIVE_ROOT:-.}/${DJANGO_ROOT}/requirements
   nginx:
+    extends:
+      file: services.base.yaml
+      service: nginx
     labels:
       - traefik.http.routers.$PROJECT-nginx.entrypoints=web
     develop:
@@ -20,6 +34,9 @@ services:
           path: ${WATCH_RELATIVE_ROOT:-.}/${NGINX_ROOT}
           # TODO: Watch changes in Django static files, including dependencies.
   traefik:
+    extends:
+      file: services.base.yaml
+      service: traefik
     command:
       - "--api.dashboard=true"
       - "--providers.docker=true"
@@ -35,7 +52,14 @@ services:
       traefik.http.routers.traefik.service: api@internal
       traefik.http.routers.traefik.entrypoints: traefik
   fail2ban:
+    extends:
+      file: services.base.yaml
+      service: fail2ban
     develop:
       watch:
         - action: rebuild
           path: ./fail2ban
+  ofelia:
+    extends:
+      file: services.base.yaml
+      service: ofelia

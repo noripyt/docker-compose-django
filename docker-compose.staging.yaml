@@ -1,0 +1,13 @@
+include:
+  - path: networks.yaml
+    env_file:
+      - .env.base
+      - .env.staging
+  - path: volumes.deployment.yaml
+    env_file:
+      - .env.base
+      - .env.staging
+  - path: services.deployment.yaml
+    env_file:
+      - .env.base
+      - .env.staging

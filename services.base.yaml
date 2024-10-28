@@ -1,0 +1,293 @@
+services:
+  postgresql:
+    image: postgres:16.4-alpine
+    user: postgres
+    environment:
+      # We have to redefine POSTGRES_DB and POSTGRES_USER as themselves due to this: https://docs.docker.com/compose/environment-variables/envvars-precedence/
+      POSTGRES_DB: $PROJECT
+      POSTGRES_USER: $PROJECT
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_INITDB_ARGS: --locale-provider=icu --icu-locale=$LOCALE
+      LC_COLLATE: $LANG
+      LC_CTYPE: $LANG
+      LC_MESSAGES: $LANG
+      LC_MONETARY: $LANG
+      LC_NUMERIC: $LANG
+      LC_TIME: $LANG
+      TZ: $TZ
+    volumes:
+      - postgresql:/var/lib/postgresql/data
+      - postgresql-socket:/var/run/postgresql
+    network_mode: none
+    read_only: true
+    tmpfs:
+      - /tmp/
+      - /run/postgresql/
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", $PROJECT ]
+      interval: 1s
+      timeout: 1s
+      retries: 60
+    restart: unless-stopped
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - DAC_READ_SEARCH
+      - FOWNER
+      - SETGID
+      - SETUID
+    deploy:
+      mode: global
+      resources:
+        limits:
+          memory: 200M
+        reservations:
+          cpus: "0.1"
+          memory: 50M
+  migrate:
+    image: $PROJECT/django:${IMAGES_TAG:-latest}
+    user: django
+    command: python manage.py migrate
+    volumes:
+      - postgresql-socket:/var/run/postgresql
+      - media:/srv/media
+    networks:
+      internal:
+    read_only: true
+    tmpfs:
+      - /tmp/
+    restart: "no"
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          memory: 500M
+        reservations:
+          memory: 150M
+  django:
+    build:
+      context: .
+      target: django
+      args: &django-build-args
+        PROJECT: $PROJECT
+        DJANGO_BASE_IMAGE: ${DJANGO_BASE_IMAGE:-python:3.12.6-slim-bookworm}
+        DJANGO_PRE_INSTALL_RUN: ${DJANGO_PRE_INSTALL_RUN:-}
+        DJANGO_APT_DEPENDENCIES: ${DJANGO_APT_DEPENDENCIES:-}
+        DJANGO_NODE_BUILD: ${DJANGO_NODE_BUILD:-django_without_node}
+        DJANGO_ROOT: ${DJANGO_ROOT}
+        DJANGO_EXTRA_PIP_ARGS: ${DJANGO_EXTRA_PIP_ARGS:-}
+        DJANGO_COLLECTSTATIC_ARGS: ${DJANGO_COLLECTSTATIC_ARGS:-}
+        DJANGO_POST_INSTALL_RUN: ${DJANGO_POST_INSTALL_RUN:-}
+        DJANGO_ENVIRONMENT: $DJANGO_ENVIRONMENT
+        DJANGO_CPUS: ${DJANGO_CPUS:-1}
+        DOMAIN: $DOMAIN
+        TZ: $TZ
+        LOCALE: $LOCALE
+    image: $PROJECT/django:${IMAGES_TAG:-latest}
+    user: django
+    volumes:
+      - postgresql-socket:/var/run/postgresql
+      - media:/srv/media
+    tmpfs:
+      - /tmp/
+    networks:
+      internal:
+    read_only: true
+    expose:
+      - 8000
+    healthcheck:
+      test: python3 -c "import urllib.request; urllib.request.urlopen('http://django:8000${DJANGO_HEALTHCHECK_URL:-/}')"
+      interval: 60s
+      timeout: 60s
+      retries: 3
+    restart: unless-stopped
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "${DJANGO_CPUS:-1}"
+          memory: 500M
+        reservations:
+          cpus: "0.1"
+          memory: 150M
+  nginx:
+    build:
+      context: .
+      target: nginx
+      args:
+        <<: *django-build-args
+        NGINX_ROOT: ${NGINX_ROOT}
+    image: $PROJECT/nginx:${IMAGES_TAG:-latest}
+    environment:
+      # We have to redefine some variables as themselves due to this: https://docs.docker.com/compose/environment-variables/envvars-precedence/
+      DOMAIN: $DOMAIN
+      ALTERNATE_DOMAINS: $ALTERNATE_DOMAINS
+      IPV4_SUBNET: $IPV4_SUBNET
+      IPV6_SUBNET: $IPV6_SUBNET
+      CLIENT_MAX_BODY_SIZE: 2000M
+      HSTS_MAX_AGE: 86400
+      CSP_DEFAULT: "'self'"
+      CSP_SCRIPT: "'self' 'unsafe-inline' 'unsafe-eval'"
+      CSP_IMG: "'self' data: blob:"
+      CSP_STYLE: "'self' 'unsafe-inline'"
+      CSP_FONT: "'self' data:"
+      CSP_CONNECT: "'self'"
+      CSP_FRAME: "'self'"
+      CSP_FRAME_ANCESTORS: "'self'"
+      CSP_OBJECT: "'self'"
+      PROXY_READ_TIMEOUT: 21600s
+      TZ: $TZ
+    volumes:
+      - media:/srv/media:ro
+      - nginx-logs:/var/log/nginx
+    networks:
+      internal:
+      traefik:
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx/
+      - /var/run/
+      - /etc/nginx/conf.d/
+    healthcheck:
+      test: nc -vz -w1 nginx 80
+      interval: 1s
+      timeout: 1s
+      retries: 60
+    restart: unless-stopped
+    depends_on:
+      django:
+        condition: service_healthy
+    expose:
+      - 80
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+      - CHOWN
+      - SETGID
+      - SETUID
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 80M
+        reservations:
+          cpus: "0.1"
+          memory: 6M
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.$PROJECT-nginx.rule=Host(`www.$DOMAIN`, `$DOMAIN`)
+  traefik:
+    image: traefik:2.11.10
+    container_name: traefik
+    environment:
+      TZ: $TZ
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      traefik:
+    read_only: true
+    healthcheck:
+      test: nc -z -w1 traefik 80
+      interval: 1s
+      timeout: 1s
+      retries: 60
+    restart: unless-stopped
+    depends_on:
+      nginx:
+        condition: service_healthy
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 200M
+        reservations:
+          cpus: "0.1"
+          memory: 40M
+    labels:
+      traefik.enable: true
+  fail2ban:
+    build:
+      context: fail2ban
+      args:
+        PROJECT: $PROJECT
+        TZ: $TZ
+        HOST_HAS_SSH: $HOST_HAS_SSH
+    image: $PROJECT/fail2ban:${IMAGES_TAG:-latest}
+    container_name: fail2ban
+    network_mode: host
+    volumes:
+      - fail2ban:/var/lib/fail2ban
+      - /var/log/auth.log:/var/log/auth.log:ro
+      - nginx-logs:/var/log/nginx:ro
+    # TODO: Make the container read-only
+    healthcheck:
+      test: [ "CMD", "fail2ban-client", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    restart: unless-stopped
+    depends_on:
+      traefik:
+        condition: service_healthy
+    cap_drop:
+      - ALL
+    cap_add:
+      - DAC_OVERRIDE
+      - NET_ADMIN
+      - NET_RAW
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 100M
+        reservations:
+          cpus: "0.1"
+          memory: 20M
+  ofelia:
+    build:
+      context: ofelia
+    image: $PROJECT/ofelia:${IMAGES_TAG:-latest}
+    command: daemon --docker -f label=com.docker.compose.project=${COMPOSE_PROJECT_NAME}
+    environment:
+      TZ: $TZ
+    network_mode: none
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    read_only: true
+    # TODO: Add a health check.
+    restart: unless-stopped
+    depends_on:
+      traefik:
+        condition: service_healthy
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 150M
+        reservations:
+          cpus: "0.1"
+          memory: 50M
+    labels:
+      - ofelia.job-local.$PROJECT-restart-unhealthy-containers.schedule=@every 60s
+      - ofelia.job-local.$PROJECT-restart-unhealthy-containers.command=sh -c 'docker ps -q -f health=unhealthy -f name=${COMPOSE_PROJECT_NAME}- | xargs --no-run-if-empty docker restart'
+      - ofelia.job-local.$PROJECT-restart-unhealthy-containers.no-overlap=true
