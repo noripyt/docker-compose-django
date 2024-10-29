@@ -182,3 +182,4 @@ django/media/
 django/static/
 
 .env.secrets
+.env.secrets.example

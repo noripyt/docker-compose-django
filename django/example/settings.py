@@ -11,11 +11,12 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from ipaddress import ip_interface
-import os
 from pathlib import Path
 import socket
 
+from django.conf.global_settings import LANGUAGES
 from django.utils.log import DEFAULT_LOGGING
+from django.utils.translation import gettext_lazy as _
 from dotenv import dotenv_values
 
 from . import constants
@@ -38,9 +39,8 @@ SECRET_KEY = dotenv_secret['SECRET_KEY']
 
 DEBUG = constants.DJANGO_ENVIRONMENT == 'dev'
 
-DOMAIN = os.environ.get('DOMAIN', 'localhost')
-ALLOWED_HOSTS = [DOMAIN, 'django']
-CSRF_TRUSTED_ORIGINS = [f'https://{DOMAIN}']
+ALLOWED_HOSTS = [constants.DOMAIN, 'django']
+CSRF_TRUSTED_ORIGINS = [f'https://{constants.DOMAIN}']
 
 
 # Application definition
@@ -153,9 +153,14 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = os.environ['LOCALE']
+LANGUAGE_CODE = constants.LOCALE
+__LANGUAGES_DICT = dict(LANGUAGES)
+LANGUAGES = [
+    (code, _(__LANGUAGES_DICT.get(code, code)))
+    for code in constants.LANGUAGES_CODES
+]
 
-TIME_ZONE = os.environ['TZ']
+TIME_ZONE = constants.TZ
 
 USE_I18N = True
 
@@ -176,8 +181,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_HOST_USER = 'noreply@example.com'
 EMAIL_HOST_PASSWORD = dotenv_secret['EMAIL_HOST_PASSWORD']
 DEFAULT_FROM_EMAIL = (
-    f'Example <{EMAIL_HOST_USER}>' if constants.DJANGO_ENVIRONMENT == 'prod'
-    else f'Example {constants.DJANGO_ENVIRONMENT} <{EMAIL_HOST_USER}>'
+    f'{constants.PROJECT_VERBOSE} <{EMAIL_HOST_USER}>' if constants.DJANGO_ENVIRONMENT == 'prod'
+    else f'{constants.PROJECT_VERBOSE} {constants.DJANGO_ENVIRONMENT} <{EMAIL_HOST_USER}>'
 )
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 EMAIL_SUBJECT_PREFIX = ''
@@ -193,3 +198,10 @@ if DEBUG:
         INTERNAL_IPS.extend([str(ip) for ip in DOCKER_INTERNAL_SUBNET])
     except socket.gaierror:
         pass
+
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+else:
+
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True

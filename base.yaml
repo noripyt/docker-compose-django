@@ -77,6 +77,7 @@ services:
       target: django
       args: &django-build-args
         PROJECT: $PROJECT
+        PROJECT_VERBOSE: $PROJECT_VERBOSE
         DJANGO_BASE_IMAGE: ${DJANGO_BASE_IMAGE:-python:3.12.6-slim-bookworm}
         DJANGO_PRE_INSTALL_RUN: ${DJANGO_PRE_INSTALL_RUN:-}
         DJANGO_APT_DEPENDENCIES: ${DJANGO_APT_DEPENDENCIES:-}
@@ -90,6 +91,7 @@ services:
         DOMAIN: $DOMAIN
         TZ: $TZ
         LOCALE: $LOCALE
+        LANGUAGES_CODES: $LANGUAGES_CODES
       secrets:
         - .env.secrets
     image: $PROJECT/django:${IMAGES_TAG:-latest}
