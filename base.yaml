@@ -49,6 +49,8 @@ services:
     image: $PROJECT/django:${IMAGES_TAG:-latest}
     user: django
     command: python manage.py migrate
+    secrets:
+      - .env.secrets
     volumes:
       - postgresql-socket:/var/run/postgresql
       - media:/srv/media
@@ -70,6 +72,8 @@ services:
         reservations:
           memory: 150M
   django:
+    extends:
+      service: migrate
     build:
       context: .
       target: django
@@ -88,16 +92,8 @@ services:
         DOMAIN: $DOMAIN
         TZ: $TZ
         LOCALE: $LOCALE
-    image: $PROJECT/django:${IMAGES_TAG:-latest}
-    user: django
-    volumes:
-      - postgresql-socket:/var/run/postgresql
-      - media:/srv/media
-    tmpfs:
-      - /tmp/
-    networks:
-      internal:
-    read_only: true
+      secrets:
+        - .env.secrets
     expose:
       - 8000
     healthcheck:
@@ -107,20 +103,14 @@ services:
       retries: 3
     restart: unless-stopped
     depends_on:
-      postgresql:
-        condition: service_healthy
       migrate:
         condition: service_completed_successfully
-    cap_drop:
-      - ALL
     deploy:
       resources:
         limits:
           cpus: "${DJANGO_CPUS:-1}"
-          memory: 500M
         reservations:
           cpus: "0.1"
-          memory: 150M
   nginx:
     build:
       context: .
@@ -312,3 +302,8 @@ networks:
       config:
         - subnet: $IPV4_SUBNET
         - subnet: $IPV6_SUBNET
+
+
+secrets:
+  .env.secrets:
+    file: .env.secrets

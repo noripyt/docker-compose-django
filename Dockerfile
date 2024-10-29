@@ -53,7 +53,7 @@ RUN if [ "$DJANGO_ENVIRONMENT" = "dev" ] ; then python3 -m pip install --no-cach
     else python3 -m pip install --no-cache-dir -r requirements/prod.txt ; fi
 
 COPY --chown=django ${DJANGO_ROOT} /srv
-RUN python3 manage.py collectstatic --no-input ${DJANGO_COLLECTSTATIC_ARGS} && sh -c "${DJANGO_POST_INSTALL_RUN}"
+RUN --mount=type=secret,id=.env.secrets,uid=1000 python3 manage.py collectstatic --no-input ${DJANGO_COLLECTSTATIC_ARGS} && sh -c "${DJANGO_POST_INSTALL_RUN}"
 RUN mkdir /srv/media
 
 # Makes gunicorn display stdout & stderr as soon as they are printed.

@@ -16,8 +16,16 @@ from pathlib import Path
 import socket
 
 from django.utils.log import DEFAULT_LOGGING
+from dotenv import dotenv_values
 
 from . import constants
+
+dotenv_secret_path = Path('/run/secrets/.env.secrets')
+if not dotenv_secret_path.exists():
+    dotenv_secret_path = Path(dotenv_secret_path.name)
+    if not dotenv_secret_path.exists():
+        raise ValueError('You did not correctly create a .env.secrets file at the project root.')
+dotenv_secret = dotenv_values(dotenv_secret_path)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,8 +34,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*rl#)!c(9x1rp$0jk+v3yizz-l8g!x&(u3%bold3at!-pq^=cd'
+SECRET_KEY = dotenv_secret['SECRET_KEY']
 
 DEBUG = constants.DJANGO_ENVIRONMENT == 'dev'
 
@@ -167,6 +174,7 @@ STATIC_ROOT = BASE_DIR / 'static'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_HOST_USER = 'noreply@example.com'
+EMAIL_HOST_PASSWORD = dotenv_secret['EMAIL_HOST_PASSWORD']
 DEFAULT_FROM_EMAIL = (
     f'Example <{EMAIL_HOST_USER}>' if constants.DJANGO_ENVIRONMENT == 'prod'
     else f'Example {constants.DJANGO_ENVIRONMENT} <{EMAIL_HOST_USER}>'
