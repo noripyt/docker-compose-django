@@ -181,5 +181,8 @@ tx
 django/media/
 django/static/
 
-.env.secrets
-.env.secrets.example
+.env
+.env.*
+docker-compose*.yaml
+**/Dockerfile*
+README.md
