@@ -40,6 +40,7 @@ ARG DOMAIN
 ARG TZ
 ARG LOCALE
 ARG LANGUAGES_CODES
+ARG CLIENT_MAX_BODY_SIZE
 
 ENV PATH="$PATH:/srv/.local/bin" \
     PROJECT=${PROJECT} \
@@ -49,7 +50,8 @@ ENV PATH="$PATH:/srv/.local/bin" \
     DOMAIN=${DOMAIN} \
     TZ=${TZ} \
     LOCALE=${LOCALE} \
-    LANGUAGES_CODES=${LANGUAGES_CODES}
+    LANGUAGES_CODES=${LANGUAGES_CODES} \
+    CLIENT_MAX_BODY_SIZE=${CLIENT_MAX_BODY_SIZE}
 
 COPY --chown=django ${DJANGO_ROOT}/requirements/* requirements/
 RUN python3 -m pip install --no-cache-dir -r requirements/base.txt ${DJANGO_EXTRA_PIP_ARGS}
@@ -71,6 +73,12 @@ FROM nginx:1.26.2-alpine-slim AS nginx
 ARG PROJECT
 ARG NGINX_ROOT
 ARG DOMAIN
+ARG TZ
+ARG CLIENT_MAX_BODY_SIZE
+
+ENV DOMAIN=${DOMAIN} \
+    TZ=${TZ} \
+    CLIENT_MAX_BODY_SIZE=${CLIENT_MAX_BODY_SIZE}
 
 RUN sed -i "s|/var/log/nginx/|/var/log/nginx/${PROJECT}.|g" /etc/nginx/nginx.conf  \
     && grep -q "/var/log/nginx/${PROJECT}." /etc/nginx/nginx.conf \

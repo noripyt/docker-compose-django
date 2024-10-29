@@ -68,7 +68,7 @@ server {
   add_header Content-Security-Policy "default-src ${CSP_DEFAULT}; script-src ${CSP_SCRIPT}; img-src ${CSP_IMG}; style-src ${CSP_STYLE}; font-src ${CSP_FONT}; connect-src ${CSP_CONNECT}; frame-src ${CSP_FRAME}; frame-ancestors ${CSP_FRAME_ANCESTORS}; object-src ${CSP_OBJECT};";
 
 
-  client_max_body_size ${CLIENT_MAX_BODY_SIZE};
+  client_max_body_size ${CLIENT_MAX_BODY_SIZE}M;
 
   # Parameters to avoid DDOS attacks on static files
   limit_conn static_conn 100;

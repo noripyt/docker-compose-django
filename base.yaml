@@ -92,6 +92,7 @@ services:
         TZ: $TZ
         LOCALE: $LOCALE
         LANGUAGES_CODES: $LANGUAGES_CODES
+        CLIENT_MAX_BODY_SIZE: ${CLIENT_MAX_BODY_SIZE:-50}  # MB
       secrets:
         - .env.secrets
     image: $PROJECT/django:${IMAGES_TAG:-latest}
@@ -139,11 +140,9 @@ services:
     image: $PROJECT/nginx:${IMAGES_TAG:-latest}
     environment:
       # We have to redefine some variables as themselves due to this: https://docs.docker.com/compose/environment-variables/envvars-precedence/
-      DOMAIN: $DOMAIN
       ALTERNATE_DOMAINS: $ALTERNATE_DOMAINS
       IPV4_SUBNET: $IPV4_SUBNET
       IPV6_SUBNET: $IPV6_SUBNET
-      CLIENT_MAX_BODY_SIZE: 2000M
       HSTS_MAX_AGE: 86400
       CSP_DEFAULT: "'self'"
       CSP_SCRIPT: "'self' 'unsafe-inline' 'unsafe-eval'"
@@ -155,7 +154,6 @@ services:
       CSP_FRAME_ANCESTORS: "'self'"
       CSP_OBJECT: "'self'"
       PROXY_READ_TIMEOUT: 21600s
-      TZ: $TZ
     volumes:
       - media:/srv/media:ro
       - nginx-logs:/var/log/nginx
