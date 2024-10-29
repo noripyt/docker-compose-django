@@ -1,3 +1,42 @@
+x-django-base: &django-base
+  build:
+    context: .
+    target: django
+    args: &django-build-args
+      PROJECT: $PROJECT
+      DJANGO_BASE_IMAGE: ${DJANGO_BASE_IMAGE:-python:3.12.6-slim-bookworm}
+      DJANGO_PRE_INSTALL_RUN: ${DJANGO_PRE_INSTALL_RUN:-}
+      DJANGO_APT_DEPENDENCIES: ${DJANGO_APT_DEPENDENCIES:-}
+      DJANGO_NODE_BUILD: ${DJANGO_NODE_BUILD:-django_without_node}
+      DJANGO_ROOT: ${DJANGO_ROOT}
+      DJANGO_EXTRA_PIP_ARGS: ${DJANGO_EXTRA_PIP_ARGS:-}
+      DJANGO_COLLECTSTATIC_ARGS: ${DJANGO_COLLECTSTATIC_ARGS:-}
+      DJANGO_POST_INSTALL_RUN: ${DJANGO_POST_INSTALL_RUN:-}
+      DJANGO_ENVIRONMENT: $DJANGO_ENVIRONMENT
+      DJANGO_CPUS: ${DJANGO_CPUS:-1}
+      DOMAIN: $DOMAIN
+      TZ: $TZ
+      LOCALE: $LOCALE
+    secrets:
+      - .env.secrets
+  image: $PROJECT/django:${IMAGES_TAG:-latest}
+  user: django
+  secrets:
+    - .env.secrets
+  volumes:
+    - postgresql-socket:/var/run/postgresql
+    - media:/srv/media
+  networks:
+    internal:
+  read_only: true
+  tmpfs:
+    - /tmp/
+  depends_on:
+    postgresql:
+      condition: service_healthy
+  cap_drop:
+    - ALL
+
 services:
   postgresql:
     image: postgres:17.0-alpine
@@ -46,25 +85,9 @@ services:
           cpus: "0.1"
           memory: 50M
   migrate:
-    image: $PROJECT/django:${IMAGES_TAG:-latest}
-    user: django
+    <<: *django-base
     command: python manage.py migrate
-    secrets:
-      - .env.secrets
-    volumes:
-      - postgresql-socket:/var/run/postgresql
-      - media:/srv/media
-    networks:
-      internal:
-    read_only: true
-    tmpfs:
-      - /tmp/
     restart: "no"
-    depends_on:
-      postgresql:
-        condition: service_healthy
-    cap_drop:
-      - ALL
     deploy:
       resources:
         limits:
@@ -72,28 +95,7 @@ services:
         reservations:
           memory: 150M
   django:
-    extends:
-      service: migrate
-    build:
-      context: .
-      target: django
-      args: &django-build-args
-        PROJECT: $PROJECT
-        DJANGO_BASE_IMAGE: ${DJANGO_BASE_IMAGE:-python:3.12.6-slim-bookworm}
-        DJANGO_PRE_INSTALL_RUN: ${DJANGO_PRE_INSTALL_RUN:-}
-        DJANGO_APT_DEPENDENCIES: ${DJANGO_APT_DEPENDENCIES:-}
-        DJANGO_NODE_BUILD: ${DJANGO_NODE_BUILD:-django_without_node}
-        DJANGO_ROOT: ${DJANGO_ROOT}
-        DJANGO_EXTRA_PIP_ARGS: ${DJANGO_EXTRA_PIP_ARGS:-}
-        DJANGO_COLLECTSTATIC_ARGS: ${DJANGO_COLLECTSTATIC_ARGS:-}
-        DJANGO_POST_INSTALL_RUN: ${DJANGO_POST_INSTALL_RUN:-}
-        DJANGO_ENVIRONMENT: $DJANGO_ENVIRONMENT
-        DJANGO_CPUS: ${DJANGO_CPUS:-1}
-        DOMAIN: $DOMAIN
-        TZ: $TZ
-        LOCALE: $LOCALE
-      secrets:
-        - .env.secrets
+    <<: *django-base
     expose:
       - 8000
     healthcheck:
@@ -109,8 +111,10 @@ services:
       resources:
         limits:
           cpus: "${DJANGO_CPUS:-1}"
+          memory: 500M
         reservations:
           cpus: "0.1"
+          memory: 150M
   nginx:
     build:
       context: .
