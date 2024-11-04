@@ -31,6 +31,7 @@ services:
       - "8080:8080"
     labels:
       # Configures the Traefik dashboard to be displayed on DOMAIN:8080/dashboard/
+      traefik.enable: true
       traefik.http.routers.traefik.rule: Host(`$DOMAIN`)
       traefik.http.routers.traefik.service: api@internal
       traefik.http.routers.traefik.entrypoints: traefik
