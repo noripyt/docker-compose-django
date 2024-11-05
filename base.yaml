@@ -142,7 +142,7 @@ services:
     image: $PROJECT/nginx:${IMAGES_TAG:-latest}
     environment:
       # We have to redefine some variables as themselves due to this: https://docs.docker.com/compose/environment-variables/envvars-precedence/
-      ALTERNATE_DOMAINS_REGEXP: $ALTERNATE_DOMAINS_REGEXP
+      ALTERNATE_DOMAINS_NGINX: $ALTERNATE_DOMAINS_NGINX
       IPV4_SUBNET: $IPV4_SUBNET
       IPV6_SUBNET: $IPV6_SUBNET
       HSTS_MAX_AGE: 86400
@@ -196,7 +196,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - traefik.http.routers.$PROJECT-nginx.rule=Host(`$DOMAIN`) || HostRegexp(`$ALTERNATE_DOMAINS_REGEXP`)
+      - traefik.http.routers.$PROJECT-nginx.rule=Host(`$DOMAIN`) || $ALTERNATE_DOMAINS_TRAEFIK
   traefik:
     image: traefik:3.2.0
     container_name: traefik
