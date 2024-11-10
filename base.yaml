@@ -25,9 +25,11 @@ services:
       - /run/postgresql/
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", $PROJECT ]
-      interval: 1s
-      timeout: 1s
-      retries: 60
+      start_period: 60s
+      start_interval: 1s
+      interval: 60s
+      timeout: 60s
+      retries: 3
     restart: unless-stopped
     cap_drop:
       - ALL
@@ -167,9 +169,11 @@ services:
       - /etc/nginx/conf.d/
     healthcheck:
       test: nc -vz -w1 nginx 80
-      interval: 1s
-      timeout: 1s
-      retries: 60
+      start_period: 60s
+      start_interval: 1s
+      interval: 60s
+      timeout: 60s
+      retries: 3
     restart: unless-stopped
     depends_on:
       django:
@@ -208,9 +212,11 @@ services:
     read_only: true
     healthcheck:
       test: nc -z -w1 traefik 80
-      interval: 1s
-      timeout: 1s
-      retries: 60
+      start_period: 60s
+      start_interval: 1s
+      interval: 60s
+      timeout: 60s
+      retries: 3
     restart: unless-stopped
     depends_on:
       nginx:
@@ -243,9 +249,11 @@ services:
     # TODO: Make the container read-only
     healthcheck:
       test: [ "CMD", "fail2ban-client", "ping" ]
-      interval: 10s
-      timeout: 5s
-      retries: 6
+      start_period: 60s
+      start_interval: 1s
+      interval: 60s
+      timeout: 60s
+      retries: 3
     restart: unless-stopped
     depends_on:
       traefik:
