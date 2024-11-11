@@ -147,7 +147,7 @@ services:
       IPV6_SUBNET: $IPV6_SUBNET
       HSTS_MAX_AGE: 86400
       CSP_DEFAULT: "'self'"
-      CSP_SCRIPT: "'self' 'unsafe-inline' 'unsafe-eval'"
+      CSP_SCRIPT: "'self' blob: 'unsafe-inline' 'unsafe-eval'"
       CSP_IMG: "'self' data: blob:"
       CSP_STYLE: "'self' 'unsafe-inline'"
       CSP_FONT: "'self' data:"
