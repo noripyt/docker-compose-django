@@ -1,0 +1,42 @@
+services:
+  memcached:
+    image: memcached:1.6.32-alpine
+    # Allocate up to 256 MB of RAM with at max 10 MB per key and run using a UNIX socket (faster).
+    command: [ "memcached", "-m", "256", "-I", "10m", "--unix-socket", "/tmp/memcached.sock", "--unix-mask", "766" ]
+    volumes:
+      - cache-socket:/tmp
+    networks:
+      internal:
+    read_only: true
+    healthcheck:
+      test: nc -vz -w1 local:/tmp/memcached.sock
+      start_period: 60s
+      start_interval: 1s
+      interval: 60s
+      timeout: 60s
+      retries: 3
+    restart: unless-stopped
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 260M
+        reservations:
+          memory: 20M
+  migrate:
+    volumes: &socket_volume
+      - cache-socket:/var/run/memcached
+    depends_on:
+      memcached:
+        condition: service_healthy
+  django:
+    volumes: *socket_volume
+    depends_on:
+      memcached:
+        condition: service_healthy
+
+
+volumes:
+  cache-socket:
