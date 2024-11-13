@@ -14,7 +14,7 @@ Assuming you use the latest Debian version.
   }
   ```
 - Restart Docker with `systemctl restart docker`
-- Limit the journalctl log size (it can take several GB after months) by editing `/etc/systemd/journalctl.conf` and set:
+- Limit the journalctl log size (it can take several GB after months) by editing `/etc/systemd/journald.conf` and set:
 
   ```
   [Journal]
