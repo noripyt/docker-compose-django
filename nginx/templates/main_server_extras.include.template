@@ -1,0 +1,2 @@
+# Replace with a custom nginx code that will be added at the beginning of the `server` block of the main domain.
+# Put it in $DJANGO_ROOT/nginx_templates

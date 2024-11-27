@@ -1,3 +1,5 @@
+include /etc/nginx/conf.d/http_extras.include;
+
 # Forward the client IP, not the Træfik IP.
 real_ip_header X-Forwarded-For;
 set_real_ip_from ${IPV4_SUBNET};
@@ -15,6 +17,8 @@ server {
   server_name ${DOMAIN};
 
   server_tokens off;
+
+  include /etc/nginx/conf.d/main_server_extras.include;
 
   error_page 403 404 =404 /404;
   error_page 502 /502.html;
@@ -112,5 +116,8 @@ server {
   listen 80;
   listen [::]:80;
   server_name ${ALTERNATE_DOMAINS_NGINX};
+
+  include /etc/nginx/conf.d/alternate_server_extras.include;
+
   rewrite ^(.*) https://${DOMAIN}$1 permanent;
 }

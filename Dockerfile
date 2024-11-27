@@ -61,6 +61,8 @@ RUN if [ "$DJANGO_ENVIRONMENT" = "dev" ] ; then python3 -m pip install --no-cach
 COPY --chown=django ${DJANGO_ROOT} /srv
 RUN --mount=type=secret,id=.env.secrets,uid=1000 python3 manage.py collectstatic --no-input ${DJANGO_COLLECTSTATIC_ARGS} && sh -c "${DJANGO_POST_INSTALL_RUN}"
 RUN mkdir /srv/media
+# Creates the directory in case it does not exist, to make custom nginx configuration optional.
+RUN mkdir -p /srv/nginx_templates
 
 # Makes gunicorn display stdout & stderr as soon as they are printed.
 ENV PYTHONUNBUFFERED=true
@@ -89,6 +91,7 @@ RUN sed -i "s|/var/log/nginx/|/var/log/nginx/${PROJECT}.|g" /etc/nginx/nginx.con
     && rm /var/log/nginx/*
 
 COPY --chown=nginx ${NGINX_ROOT}/templates /etc/nginx/templates
+COPY --from=django --chown=nginx /srv/nginx_templates/* /etc/nginx/templates/
 COPY --chown=nginx ${NGINX_ROOT} /srv/nginx
 # FIXME: Replace with passing --exclude=${NGINX_ROOT}/templates/ above.
 RUN rm -rf /srv/nginx/templates
