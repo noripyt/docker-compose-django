@@ -1,5 +1,5 @@
 map $http_host$request_uri $new_alternate_uri {
-    www.${DOMAIN}/ /from-subdomain;
+  www.${DOMAIN}/ /from-subdomain;
 }
 
 map $request_uri $new_main_uri {
