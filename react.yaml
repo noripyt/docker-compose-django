@@ -3,7 +3,6 @@ services:
     build:
       context: $REACT_ROOT
       args:
-        DOMAIN: $DOMAIN
         NODE_ENV: $NODE_ENV
     image: $PROJECT/react:${IMAGES_TAG:-latest}
     user: react

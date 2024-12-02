@@ -7,11 +7,9 @@ RUN chown react /srv
 
 USER react
 
-ARG DOMAIN
 ARG NODE_ENV
 
-ENV DOMAIN=${DOMAIN} \
-    NODE_ENV=${NODE_ENV}
+ENV NODE_ENV=${NODE_ENV}
 
 COPY --chown=react package.json /srv/
 COPY --chown=react package-lock.json /srv/
