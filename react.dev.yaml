@@ -1,0 +1,13 @@
+services:
+  react:
+    command: npm run dev
+    read_only: false
+    develop:
+      watch:
+        - action: sync
+          path: ${WATCH_RELATIVE_ROOT:-.}/${REACT_ROOT}
+          target: /srv
+          ignore:
+            - ${WATCH_RELATIVE_ROOT:-.}/${REACT_ROOT}/package*.json
+        - action: rebuild
+          path: ${WATCH_RELATIVE_ROOT:-.}/${REACT_ROOT}/package*.json

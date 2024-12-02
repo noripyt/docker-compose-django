@@ -1,0 +1,24 @@
+limit_conn_zone $binary_remote_addr zone=react_conn:2m;
+limit_req_zone $binary_remote_addr zone=react_req:2m rate=10r/s;
+
+location / {
+  proxy_pass http://react:3000;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto $scheme;
+  proxy_set_header Host $http_host;
+  proxy_redirect off;
+  proxy_connect_timeout 2s;
+  proxy_read_timeout ${PROXY_READ_TIMEOUT};
+  # 1.1 is needed to replace the default 1.0, otherwise `proxy_request_buffering off` is ignored.
+  # See http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_request_buffering
+  proxy_http_version 1.1;
+  proxy_request_buffering off;
+  proxy_buffering off;
+  proxy_set_header Upgrade $http_upgrade;
+  proxy_set_header Connection "upgrade";
+
+  # Parameters to avoid DDOS attacks on React
+  limit_conn react_conn 10;
+  limit_req zone=react_req burst=50;
+}

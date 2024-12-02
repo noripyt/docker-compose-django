@@ -1,0 +1,37 @@
+services:
+  build:
+    context: $REACT_ROOT
+    args:
+      DOMAIN: $DOMAIN
+      NODE_ENV: $NODE_ENV
+    image: $PROJECT/react:${IMAGES_TAG:-latest}
+    user: react
+    networks:
+      internal:
+    read_only: true
+    tmpfs:
+      - /srv/.npm/
+      - /srv/.next/cache/
+    expose:
+      - 3000
+    healthcheck:
+      test: wget http://react:3000 -q -O - > /dev/null
+      start_period: 60s
+      start_interval: 1s
+      interval: 60s
+      timeout: 60s
+      retries: 3
+    restart: unless-stopped
+    depends_on:
+      django:
+        condition: service_healthy
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1000M
+        reservations:
+          cpus: "0.2"
+          memory: 250M
