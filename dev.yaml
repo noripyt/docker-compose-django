@@ -1,6 +1,6 @@
 services:
   django:
-    command: python manage.py runserver django:8000
+    command: ./manage.py runserver django:8000
     read_only: false
     develop:
       watch:
@@ -9,6 +9,7 @@ services:
           target: /srv
           ignore:
             - ${WATCH_RELATIVE_ROOT:-.}/${DJANGO_ROOT}/requirements/
+            - ${WATCH_RELATIVE_ROOT:-.}/${DJANGO_ROOT}/nginx_templates/
         - action: rebuild
           path: ${WATCH_RELATIVE_ROOT:-.}/${DJANGO_ROOT}/requirements
   nginx:
@@ -18,7 +19,8 @@ services:
       watch:
         - action: rebuild
           path: ${WATCH_RELATIVE_ROOT:-.}/${NGINX_ROOT}
-          # TODO: Watch changes in Django static files, including dependencies.
+        - action: rebuild
+          path: ${WATCH_RELATIVE_ROOT:-.}/${DJANGO_ROOT}/nginx_templates
   traefik:
     command:
       - "--api.dashboard=true"

@@ -48,13 +48,21 @@ services:
           memory: 50M
   migrate:
     image: $PROJECT/django:${IMAGES_TAG:-latest}
-    user: django
-    command: python manage.py migrate
+    command: sh -c "./manage.py collectstatic ${DJANGO_COLLECTSTATIC_ARGS} --no-input --clear && ./manage.py migrate"
+    environment: &django_environment
+      PROJECT: $PROJECT
+      PROJECT_VERBOSE: $PROJECT_VERBOSE
+      DOMAIN: $DOMAIN
+      TZ: $TZ
+      LOCALE: $LOCALE
+      LANGUAGES_CODES: $LANGUAGES_CODES
+      CLIENT_MAX_BODY_SIZE: ${CLIENT_MAX_BODY_SIZE}
     secrets:
       - .env.secrets
-    volumes:
+    volumes: &django_volumes
       - postgresql-socket:/var/run/postgresql
       - media:/srv/media
+      - static:/srv/static
     networks:
       internal:
     read_only: true
@@ -75,34 +83,23 @@ services:
   django:
     build:
       context: .
-      target: django
       args: &django-build-args
-        PROJECT: $PROJECT
-        PROJECT_VERBOSE: $PROJECT_VERBOSE
         DJANGO_BASE_IMAGE: ${DJANGO_BASE_IMAGE:-python:3.12.6-slim-bookworm}
         DJANGO_PRE_INSTALL_RUN: ${DJANGO_PRE_INSTALL_RUN:-}
         DJANGO_APT_DEPENDENCIES: ${DJANGO_APT_DEPENDENCIES:-}
         DJANGO_NODE_BUILD: ${DJANGO_NODE_BUILD:-django_without_node}
         DJANGO_ROOT: ${DJANGO_ROOT}
         DJANGO_EXTRA_PIP_ARGS: ${DJANGO_EXTRA_PIP_ARGS:-}
-        DJANGO_COLLECTSTATIC_ARGS: ${DJANGO_COLLECTSTATIC_ARGS:-}
         DJANGO_POST_INSTALL_RUN: ${DJANGO_POST_INSTALL_RUN:-}
         DJANGO_ENVIRONMENT: $DJANGO_ENVIRONMENT
         DJANGO_CPUS: ${DJANGO_CPUS:-1}
-        DOMAIN: $DOMAIN
-        TZ: $TZ
-        LOCALE: $LOCALE
-        LANGUAGES_CODES: $LANGUAGES_CODES
-        CLIENT_MAX_BODY_SIZE: ${CLIENT_MAX_BODY_SIZE:-50}  # MB
       secrets:
         - .env.secrets
     image: $PROJECT/django:${IMAGES_TAG:-latest}
-    user: django
+    environment: *django_environment
     secrets:
       - .env.secrets
-    volumes:
-      - postgresql-socket:/var/run/postgresql
-      - media:/srv/media
+    volumes: *django_volumes
     networks:
       internal:
     read_only: true
@@ -135,10 +132,12 @@ services:
   nginx:
     build:
       context: .
-      target: nginx
+      dockerfile: nginx.Dockerfile
       args:
-        <<: *django-build-args
+        DOMAIN: $DOMAIN
         NGINX_ROOT: ${NGINX_ROOT}
+        DJANGO_ROOT: ${DJANGO_ROOT}
+        CLIENT_MAX_BODY_SIZE: ${CLIENT_MAX_BODY_SIZE}
     image: $PROJECT/nginx:${IMAGES_TAG:-latest}
     environment:
       # We have to redefine some variables as themselves due to this: https://docs.docker.com/compose/environment-variables/envvars-precedence/
@@ -158,6 +157,7 @@ services:
       PROXY_READ_TIMEOUT: 21600s
     volumes:
       - media:/srv/media:ro
+      - static:/srv/static:ro
       - nginx-logs:/var/log/nginx
     networks:
       internal:
@@ -306,6 +306,7 @@ volumes:
   postgresql:
   postgresql-socket:
   media:
+  static:
   nginx-logs:
     name: "nginx-logs"  # That way, no project prefix.
   fail2ban:
