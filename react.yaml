@@ -11,7 +11,7 @@ services:
     read_only: true
     tmpfs:
       - /srv/.npm/
-      - /srv/.next/cache/
+      - /srv/.next/
     expose:
       - 3000
     healthcheck:
