@@ -35,3 +35,7 @@ services:
         reservations:
           cpus: "0.2"
           memory: 250M
+  nginx:
+    depends_on:
+      react:
+        condition: service_healthy
