@@ -25,6 +25,10 @@ services:
           memory: 260M
         reservations:
           memory: 20M
+    logging:
+      options:
+        max-file: "3"
+        max-size: "10m"
   migrate:
     volumes: &socket_volume
       - cache-socket:/var/run/memcached
