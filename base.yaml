@@ -1,6 +1,6 @@
 services:
   postgresql:
-    image: postgres:17.0-alpine
+    image: postgres:17.2-alpine
     user: postgres
     environment:
       # We have to redefine POSTGRES_DB and POSTGRES_USER as themselves due to this: https://docs.docker.com/compose/environment-variables/envvars-precedence/
@@ -206,7 +206,7 @@ services:
       - traefik.http.routers.$PROJECT-nginx.rule=Host(`$DOMAIN`) || $ALTERNATE_DOMAINS_TRAEFIK
     logging: *limited_logging
   traefik:
-    image: traefik:3.2.0
+    image: traefik:3.3.1
     container_name: traefik
     environment:
       TZ: $TZ
