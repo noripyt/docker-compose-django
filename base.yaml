@@ -140,6 +140,7 @@ services:
       context: .
       dockerfile: nginx.Dockerfile
       args:
+        PROJECT: $PROJECT
         DOMAIN: $DOMAIN
         NGINX_ROOT: ${NGINX_ROOT}
         DJANGO_ROOT: ${DJANGO_ROOT}
