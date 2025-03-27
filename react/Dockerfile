@@ -11,11 +11,11 @@ ARG NODE_ENV
 
 ENV NODE_ENV=${NODE_ENV}
 
-COPY --chown=react package.json /srv/
-COPY --chown=react package-lock.json /srv/
+COPY --chown=react ${REACT_ROOT}/package.json /srv/
+COPY --chown=react ${REACT_ROOT}/package-lock.json /srv/
 RUN npm install && npm cache clean --force && rm package-lock.json && rm -rf /srv/.npm/
 
-COPY --chown=react . /srv
+COPY --chown=react ${REACT_ROOT} /srv
 
 RUN mkdir /srv/.next
 RUN if [ "${NODE_ENV}" = "production" ] ; then npm run build ; fi && rm -rf /srv/.npm/ /srv/.next/cache/
