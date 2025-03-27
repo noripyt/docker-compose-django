@@ -5,6 +5,7 @@ location / {
   proxy_set_header X-Forwarded-Proto $scheme;
   proxy_set_header Host $http_host;
   proxy_redirect off;
+  proxy_intercept_errors on;
   proxy_connect_timeout 2s;
   proxy_read_timeout ${PROXY_READ_TIMEOUT};
   # 1.1 is needed to replace the default 1.0, otherwise `proxy_request_buffering off` is ignored.
