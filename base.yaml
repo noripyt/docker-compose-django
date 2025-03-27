@@ -53,6 +53,7 @@ services:
   migrate:
     image: $PROJECT/django:${IMAGES_TAG:-latest}
     command: sh -c "./manage.py collectstatic ${DJANGO_COLLECTSTATIC_ARGS} --no-input --clear && ./manage.py migrate"
+    user: django
     environment: &django_environment
       PROJECT: $PROJECT
       PROJECT_VERBOSE: $PROJECT_VERBOSE
@@ -101,6 +102,7 @@ services:
       secrets:
         - .env.secrets
     image: $PROJECT/django:${IMAGES_TAG:-latest}
+    user: django
     environment: *django_environment
     secrets:
       - .env.secrets
