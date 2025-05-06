@@ -89,7 +89,7 @@ services:
   django:
     build:
       context: .
-      args: &django-build-args
+      args:
         DJANGO_BASE_IMAGE: ${DJANGO_BASE_IMAGE:-python:3.12.6-slim-bookworm}
         DJANGO_PRE_INSTALL_RUN: ${DJANGO_PRE_INSTALL_RUN:-}
         DJANGO_APT_DEPENDENCIES: ${DJANGO_APT_DEPENDENCIES:-}
