@@ -52,7 +52,7 @@ services:
         max-size: "10m"
   migrate:
     image: $PROJECT/django:${IMAGES_TAG:-latest}
-    command: sh -c "./manage.py collectstatic ${DJANGO_COLLECTSTATIC_ARGS} --no-input --clear && ./manage.py migrate"
+    command: sh -c "./manage.py collectstatic ${DJANGO_COLLECTSTATIC_ARGS} --no-input --clear && ./manage.py migrate --no-input"
     user: django
     environment: &django_environment
       PROJECT: $PROJECT
