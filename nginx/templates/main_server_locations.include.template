@@ -26,6 +26,6 @@ location / {
   proxy_buffering off;
 
   # Parameters to avoid DDOS attacks on gunicorn
-  limit_conn django_conn 10;
-  limit_req zone=django_req burst=50 nodelay;
+  limit_conn django_conn 3;
+  limit_req zone=django_req burst=10 delay=3;
 }

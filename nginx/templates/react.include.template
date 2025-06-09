@@ -17,6 +17,6 @@ location / {
   proxy_set_header Connection "upgrade";
 
   # Parameters to avoid DDOS attacks on React
-  limit_conn react_conn 10;
-  limit_req zone=react_req burst=50;
+  limit_conn react_conn 5;
+  limit_req zone=react_req burst=20 delay=10;
 }
