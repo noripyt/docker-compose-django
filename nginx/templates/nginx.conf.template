@@ -15,11 +15,11 @@ map $binary_remote_addr $subnet {
 
 # Zones created to avoid DDOS attacks
 limit_conn_zone $subnet zone=django_conn:1m;
-limit_req_zone $subnet zone=django_req:1m rate=1r/s;
+limit_req_zone $subnet zone=django_req:1m rate=${DJANGO_LIMIT_REQ_RATE};
 limit_conn_zone $subnet zone=react_conn:2m;
-limit_req_zone $subnet zone=react_req:2m rate=3r/s;
+limit_req_zone $subnet zone=react_req:2m rate=${REACT_LIMIT_REQ_RATE};
 limit_conn_zone $subnet zone=static_conn:10m;
-limit_req_zone $subnet zone=static_req:10m rate=10r/s;
+limit_req_zone $subnet zone=static_req:10m rate=${STATIC_LIMIT_REQ_RATE};
 
 server {
   listen 80;
@@ -85,8 +85,8 @@ server {
   client_max_body_size ${CLIENT_MAX_BODY_SIZE}M;
 
   # Parameters to avoid DDOS attacks on static files
-  limit_conn static_conn 15;
-  limit_req zone=static_req burst=200 delay=100;
+  limit_conn static_conn ${STATIC_LIMIT_CONN};
+  limit_req zone=static_req burst=${STATIC_LIMIT_REQ_BURST} delay=${STATIC_LIMIT_REQ_DELAY};
 
   include /etc/nginx/conf.d/main_server_locations.include;
 }

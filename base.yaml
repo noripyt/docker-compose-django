@@ -164,6 +164,18 @@ services:
       CSP_FRAME_ANCESTORS: "'self'"
       CSP_OBJECT: "'self'"
       PROXY_READ_TIMEOUT: 21600s
+      DJANGO_LIMIT_CONN: 3
+      DJANGO_LIMIT_REQ_RATE: 1r/s
+      DJANGO_LIMIT_REQ_BURST: 10
+      DJANGO_LIMIT_REQ_DELAY: 3
+      REACT_LIMIT_CONN: 5
+      REACT_LIMIT_REQ_RATE: 3r/s
+      REACT_LIMIT_REQ_BURST: 20
+      REACT_LIMIT_REQ_DELAY: 10
+      STATIC_LIMIT_CONN: 15
+      STATIC_LIMIT_REQ_RATE: 10r/s
+      STATIC_LIMIT_REQ_BURST: 200
+      STATIC_LIMIT_REQ_DELAY: 100
     volumes:
       - media:/srv/media:ro
       - static:/srv/static:ro
