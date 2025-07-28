@@ -23,6 +23,7 @@ services:
     tmpfs:
       - /tmp/
       - /run/postgresql/
+    shm_size: 128mb
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", $PROJECT ]
       start_period: 60s
