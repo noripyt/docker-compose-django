@@ -33,11 +33,13 @@ ARG DJANGO_EXTRA_PIP_ARGS
 ARG DJANGO_POST_INSTALL_RUN
 ARG DJANGO_ENVIRONMENT
 ARG DJANGO_CPUS
+ARG DJANGO_THREADS
 ARG DOMAIN
 
 ENV PATH="$PATH:/srv/.local/bin" \
     DJANGO_ENVIRONMENT=${DJANGO_ENVIRONMENT} \
     DJANGO_CPUS=${DJANGO_CPUS} \
+    DJANGO_THREADS=${DJANGO_THREADS} \
     DOMAIN=${DOMAIN}
 
 COPY --chown=django ${DJANGO_ROOT}/requirements/* requirements/
@@ -54,4 +56,4 @@ RUN mkdir -p /srv/nginx_templates
 # Makes gunicorn display stdout & stderr as soon as they are printed.
 ENV PYTHONUNBUFFERED=true
 
-CMD gunicorn $PROJECT.wsgi:application -b django:8000 --workers $DJANGO_CPUS --threads 8 -t 86400
+CMD gunicorn $PROJECT.wsgi:application -b django:8000 --workers $DJANGO_CPUS --threads $DJANGO_THREADS -t 86400
