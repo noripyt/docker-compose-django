@@ -28,6 +28,11 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--providers.docker.network=traefik"
       - "--entrypoints.web.address=:80"
+      # Disable the default timeouts from Træfik, as they can have negative consequences,
+      # like readTimeout stopping uploads after 60s by default.
+      - "--entryPoints.web.transport.respondingTimeouts.readTimeout=0s"
+      - "--entryPoints.web.transport.respondingTimeouts.writeTimeout=0s"
+      - "--entryPoints.web.transport.respondingTimeouts.idleTimeout=0s"
       - "--entrypoints.traefik.address=:8080"
     ports:
       - "8080:8080"
