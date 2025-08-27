@@ -341,7 +341,6 @@ volumes:
 
 networks:
   internal:
-    enable_ipv6: true
   traefik:
     enable_ipv6: true
     name: "traefik"

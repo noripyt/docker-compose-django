@@ -23,7 +23,6 @@ limit_req_zone $subnet zone=static_req:10m rate=${STATIC_LIMIT_REQ_RATE};
 
 server {
   listen 80;
-  listen [::]:80;
   server_name ${DOMAIN};
 
   server_tokens off;
@@ -93,7 +92,6 @@ server {
 
 server {
   listen 80;
-  listen [::]:80;
   server_name ${ALTERNATE_DOMAINS_NGINX};
 
   include /etc/nginx/conf.d/alternate_server_extras.include;
