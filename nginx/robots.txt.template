@@ -3,6 +3,8 @@ Sitemap: https://${DOMAIN}/sitemap.xml
 Allow: /
 Crawl-delay: 10
 
+Disable: /*?next=*
+
 User-agent: 360Spider
 User-agent: 404checker
 User-agent: 404enemy
@@ -256,6 +258,9 @@ User-agent: Meanpathbot
 User-agent: mediawords
 User-agent: MegaIndex.ru
 User-agent: Metauri
+User-agent: meta-externalads
+User-agent: meta-externalagent
+User-agent: meta-webindexer
 User-agent: MFC_Tear_Sample
 User-agent: Microsoft Data Access
 User-agent: Microsoft URL Control
