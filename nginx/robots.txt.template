@@ -3,7 +3,7 @@ Sitemap: https://${DOMAIN}/sitemap.xml
 Allow: /
 Crawl-delay: 10
 
-Disable: /*?next=*
+Disable: /*?*
 
 User-agent: 360Spider
 User-agent: 404checker
