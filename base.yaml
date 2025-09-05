@@ -155,6 +155,7 @@ services:
       ALTERNATE_DOMAINS_NGINX: $ALTERNATE_DOMAINS_NGINX
       IPV4_SUBNET: $IPV4_SUBNET
       IPV6_SUBNET: $IPV6_SUBNET
+      BASIC_AUTH_ENABLED: $BASIC_AUTH_ENABLED
       HSTS_MAX_AGE: 86400
       CSP_DEFAULT: "'self'"
       CSP_SCRIPT: "'self' blob: 'unsafe-inline' 'unsafe-eval'"
