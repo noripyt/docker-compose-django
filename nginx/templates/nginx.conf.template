@@ -48,7 +48,7 @@ server {
   }
 
   location /robots.txt {
-    root /srv/nginx;
+    alias /etc/nginx/conf.d/robots.txt;
     allow all;
   }
 

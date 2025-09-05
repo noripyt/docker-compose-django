@@ -145,17 +145,17 @@ services:
       dockerfile: nginx.Dockerfile
       args:
         PROJECT: $PROJECT
-        DOMAIN: $DOMAIN
         NGINX_ROOT: ${NGINX_ROOT}
         DJANGO_ROOT: ${DJANGO_ROOT}
-        CLIENT_MAX_BODY_SIZE: ${CLIENT_MAX_BODY_SIZE}
     image: $PROJECT/nginx:${IMAGES_TAG:-latest}
     environment:
       # We have to redefine some variables as themselves due to this: https://docs.docker.com/compose/environment-variables/envvars-precedence/
+      DOMAIN: $DOMAIN
       ALTERNATE_DOMAINS_NGINX: $ALTERNATE_DOMAINS_NGINX
       IPV4_SUBNET: $IPV4_SUBNET
       IPV6_SUBNET: $IPV6_SUBNET
       BASIC_AUTH_ENABLED: $BASIC_AUTH_ENABLED
+      CLIENT_MAX_BODY_SIZE: $CLIENT_MAX_BODY_SIZE
       HSTS_MAX_AGE: 86400
       CSP_DEFAULT: "'self'"
       CSP_SCRIPT: "'self' blob: 'unsafe-inline' 'unsafe-eval'"
@@ -179,6 +179,8 @@ services:
       STATIC_LIMIT_REQ_RATE: 10r/s
       STATIC_LIMIT_REQ_BURST: 200
       STATIC_LIMIT_REQ_DELAY: 100
+      # TZ for setting the correct timezone in nginx logs.
+      TZ: $TZ
     volumes:
       - media:/srv/media:ro
       - static:/srv/static:ro
