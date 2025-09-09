@@ -62,6 +62,7 @@ services:
       TZ: $TZ
       LOCALE: $LOCALE
       LANGUAGES_CODES: $LANGUAGES_CODES
+      EMAIL_ADDRESS: $EMAIL_ADDRESS
       CLIENT_MAX_BODY_SIZE: ${CLIENT_MAX_BODY_SIZE}
     secrets:
       - .env.secrets
