@@ -15,11 +15,7 @@ services:
         tmpfs:
           mode: 0o01777
       - type: tmpfs
-        target: /srv/.next/cache
-        tmpfs:
-          mode: 0o01777
-      - type: tmpfs
-        target: /srv/.next/server
+        target: /srv/.next
         tmpfs:
           mode: 0o01777
     expose:

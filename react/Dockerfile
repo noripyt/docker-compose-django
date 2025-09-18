@@ -17,7 +17,9 @@ RUN npm install && npm cache clean --force && rm package-lock.json && rm -rf /sr
 
 COPY --chown=react ${REACT_ROOT} /srv
 
-RUN if [ "${NODE_ENV}" = "production" ] ; then npm run build ; fi && rm -rf /srv/.npm/ /srv/.next/cache/ /srv/.next/server/
-RUN mkdir -p /srv/.next
+RUN mkdir /srv/.next
+RUN if [ "${NODE_ENV}" = "production" ] ; then \
+    npm run build && mv /srv/.next /srv/.built-next \
+    ; fi && rm -rf /srv/.npm/
 
-CMD npm start
+CMD cp -r /srv/.built-next/* /srv/.next/ && npm start
