@@ -1,4 +1,4 @@
-FROM node:22.13.0-alpine
+FROM node:22.19.0-alpine
 
 
 RUN adduser --disabled-password --home /srv --no-create-home react
@@ -17,7 +17,7 @@ RUN npm install && npm cache clean --force && rm package-lock.json && rm -rf /sr
 
 COPY --chown=react ${REACT_ROOT} /srv
 
+RUN if [ "${NODE_ENV}" = "production" ] ; then npm run build ; fi && rm -rf /srv/.npm/ /srv/.next/cache/ /srv/.next/server/
 RUN mkdir /srv/.next
-RUN if [ "${NODE_ENV}" = "production" ] ; then npm run build ; fi && rm -rf /srv/.npm/ /srv/.next/cache/
 
 CMD npm start

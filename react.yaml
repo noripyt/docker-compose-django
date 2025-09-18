@@ -9,9 +9,19 @@ services:
     networks:
       internal:
     read_only: true
-    tmpfs:
-      - /srv/.npm/
-      - /srv/.next/cache/
+    volumes:
+      - type: tmpfs
+        target: /srv/.npm
+        tmpfs:
+          mode: 0o01777
+      - type: tmpfs
+        target: /srv/.next/cache
+        tmpfs:
+          mode: 0o01777
+      - type: tmpfs
+        target: /srv/.next/server
+        tmpfs:
+          mode: 0o01777
     expose:
       - 3000
     healthcheck:
