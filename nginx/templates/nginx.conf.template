@@ -37,7 +37,7 @@ server {
 
   include /etc/nginx/conf.d/main_server_extras.include;
 
-  error_page 403 404 =404 /404;
+  error_page 403 404 =404 /404/;
   error_page 502 /502.html;
   error_page 503 /503.html;
 
