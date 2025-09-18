@@ -6,6 +6,8 @@ services:
         NODE_ENV: $NODE_ENV
     image: $PROJECT/react:${IMAGES_TAG:-latest}
     user: react
+    environment:
+      DOMAIN: $DOMAIN
     networks:
       internal:
     read_only: true
