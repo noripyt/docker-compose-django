@@ -3,7 +3,7 @@ Sitemap: https://${DOMAIN}/sitemap.xml
 Allow: /
 Crawl-delay: 10
 
-Disable: /*?*
+Disallow: /*?*
 
 User-agent: 360Spider
 User-agent: 404checker
@@ -183,6 +183,7 @@ User-agent: HTTrack
 User-agent: Humanlinks
 User-agent: HybridBot
 User-agent: Iblog
+User-agent: IbouBot
 User-agent: IDBot
 User-agent: Id-search
 User-agent: IlseBot
@@ -373,6 +374,7 @@ User-agent: Screaming
 User-agent: ScreenerBot
 User-agent: Searchestate
 User-agent: SearchmetricsBot
+User-agent: SeekportBot
 User-agent: Semrush
 User-agent: SemrushBot
 User-agent: SEOkicks
