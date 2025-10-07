@@ -23,7 +23,3 @@ Assuming you use the latest Debian version.
   then restart it with `systemctl restart systemd-journald`
 - For Debian >= 12: `apt install rsyslog`, otherwise Fail2ban cannot access auth.log. See https://unix.stackexchange.com/a/636689
   > FIXME: Make Fail2ban work with the host journalctl.
-- In `/etc/logrotate.d/rsyslog`:
-  - Add `/var/log/daemon.log`
-  - Add the `minsize 250M` setting
-  - Remove the `delaycompress` setting
