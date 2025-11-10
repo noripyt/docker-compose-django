@@ -3,6 +3,14 @@ location = /404/ {
   proxy_intercept_errors off;
 }
 
+# Disables basic auth on the API (if it exists), as it can mess with auth tokens.
+# Search engines should not return API results anyways.
+location /api/ {
+  include /etc/nginx/conf.d/django_rules.include;
+  proxy_intercept_errors on;
+  auth_basic off;
+}
+
 location / {
   include /etc/nginx/conf.d/django_rules.include;
   proxy_intercept_errors on;

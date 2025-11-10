@@ -8,6 +8,8 @@ location /static {
   alias /srv/static;
   allow all;
   expires 1w;
+  # Static files should not have basic auth, especially since it breaks browsable APIs in staging.
+  auth_basic off;
 }
 
 include /etc/nginx/conf.d/django.include;
