@@ -1,4 +1,4 @@
-location = /404/ {
+location = ${NGINX_404_URL} {
   include /etc/nginx/conf.d/react_rules.include;
   proxy_intercept_errors off;
 }

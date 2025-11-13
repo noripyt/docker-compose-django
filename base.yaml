@@ -157,6 +157,7 @@ services:
       IPV6_SUBNET: $IPV6_SUBNET
       BASIC_AUTH_ENABLED: $BASIC_AUTH_ENABLED
       CLIENT_MAX_BODY_SIZE: $CLIENT_MAX_BODY_SIZE
+      NGINX_404_URL: $NGINX_404_URL
       HSTS_MAX_AGE: 86400
       CSP_DEFAULT: "'self'"
       CSP_SCRIPT: "'self' blob: 'unsafe-inline' 'unsafe-eval'"
