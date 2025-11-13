@@ -102,6 +102,8 @@ server {
   listen 80;
   server_name ${ALTERNATE_DOMAINS_NGINX};
 
+  server_tokens off;
+
   include /etc/nginx/conf.d/alternate_server_extras.include;
 
   rewrite ^(.*) https://${DOMAIN}$1 permanent;
