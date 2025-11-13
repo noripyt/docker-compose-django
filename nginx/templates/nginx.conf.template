@@ -16,8 +16,8 @@ map $binary_remote_addr $subnet {
 # Zones created to avoid DDOS attacks
 limit_conn_zone $subnet zone=django_conn:1m;
 limit_req_zone $subnet zone=django_req:1m rate=${DJANGO_LIMIT_REQ_RATE};
-limit_conn_zone $subnet zone=react_conn:2m;
-limit_req_zone $subnet zone=react_req:2m rate=${REACT_LIMIT_REQ_RATE};
+limit_conn_zone $subnet zone=react_conn:10m;
+limit_req_zone $subnet zone=react_req:10m rate=${REACT_LIMIT_REQ_RATE};
 limit_conn_zone $subnet zone=static_conn:10m;
 limit_req_zone $subnet zone=static_req:10m rate=${STATIC_LIMIT_REQ_RATE};
 
