@@ -1,6 +1,9 @@
-location = /404/ {
+location = ${NGINX_404_URL} {
   include /etc/nginx/conf.d/django_rules.include;
   proxy_intercept_errors off;
+  # Disables auth_basic on the 404 page, otherwise a location without basic auth
+  # will ask for basic auth when it needs to show the 404 page…
+  auth_basic off;
 }
 
 # Disables basic auth on the API and django-debug-toolbar (if relevant), as it can mess with auth tokens.

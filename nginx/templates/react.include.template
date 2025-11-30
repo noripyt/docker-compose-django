@@ -1,6 +1,9 @@
 location = ${NGINX_404_URL} {
   include /etc/nginx/conf.d/react_rules.include;
   proxy_intercept_errors off;
+  # Disables auth_basic on the 404 page, otherwise a location without basic auth
+  # will ask for basic auth when it needs to show the 404 page…
+  auth_basic off;
 }
 
 location / {
