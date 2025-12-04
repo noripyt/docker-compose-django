@@ -1,6 +1,6 @@
 services:
   memcached:
-    image: memcached:1.6.34-alpine
+    image: memcached:1.6.39-alpine
     # Allocate up to 256 MB of RAM with at max 10 MB per key and run using a UNIX socket (faster).
     command: [ "memcached", "-m", "256", "-I", "10m", "--unix-socket", "/tmp/memcached.sock", "--unix-mask", "766" ]
     volumes:

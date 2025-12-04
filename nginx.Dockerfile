@@ -1,4 +1,4 @@
-FROM nginx:1.26.2-alpine-slim
+FROM nginx:1.28.0-alpine-slim
 
 ARG PROJECT
 ARG DJANGO_ROOT

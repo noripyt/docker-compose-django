@@ -1,7 +1,7 @@
 # We base ourselves on Debian because the host will be on Debian.
 # The Alpine distribution of fail2ban has custom sshd filters
 # that are not appropriate for Debian.
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
 ARG PROJECT
 ARG TZ
