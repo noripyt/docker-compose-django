@@ -36,16 +36,18 @@ ARG DJANGO_CPUS
 ARG DJANGO_THREADS
 ARG DOMAIN
 
-ENV PATH="$PATH:/srv/.local/bin" \
+ENV PATH="/srv/.venv/bin:/srv/.local/bin:$PATH" \
     DJANGO_ENVIRONMENT=${DJANGO_ENVIRONMENT} \
     DJANGO_CPUS=${DJANGO_CPUS} \
     DJANGO_THREADS=${DJANGO_THREADS} \
     DOMAIN=${DOMAIN}
 
+RUN pip install --no-cache-dir uv && uv venv
+# TODO: Replace requirements txt files with pyproject.toml & uv.lock.
 COPY --chown=django ${DJANGO_ROOT}/requirements/* requirements/
-RUN python3 -m pip install --no-cache-dir -r requirements/base.txt ${DJANGO_EXTRA_PIP_ARGS}
-RUN if [ "$DJANGO_ENVIRONMENT" = "dev" ] ; then python3 -m pip install --no-cache-dir -r requirements/dev.txt ; \
-    else python3 -m pip install --no-cache-dir -r requirements/prod.txt ; fi
+RUN uv pip install --no-cache-dir -r requirements/base.txt ${DJANGO_EXTRA_PIP_ARGS}
+RUN if [ "$DJANGO_ENVIRONMENT" = "dev" ] ; then uv pip install --no-cache-dir -r requirements/dev.txt ; \
+    else uv pip install --no-cache-dir -r requirements/prod.txt ; fi
 
 COPY --chown=django ${DJANGO_ROOT} /srv
 RUN --mount=type=secret,id=.env.secrets,uid=1000 sh -c "${DJANGO_POST_INSTALL_RUN}"
