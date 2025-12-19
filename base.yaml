@@ -63,6 +63,7 @@ services:
       LOCALE: $LOCALE
       LANGUAGES_CODES: $LANGUAGES_CODES
       EMAIL_ADDRESS: $EMAIL_ADDRESS
+      UPLOAD_MAX_BYTES: $UPLOAD_MAX_BYTES
     secrets:
       - .env.secrets
     volumes: &django_volumes
