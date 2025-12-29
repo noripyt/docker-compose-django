@@ -16,6 +16,8 @@ services:
       LC_TIME: $LANG
       TZ: $TZ
     volumes:
+      # TODO: Change the path to `/var/lib/postgresql/` (see https://hub.docker.com/_/postgres#pgdata)
+      #       when all projects are on PostgreSQL>=18
       - postgresql:/var/lib/postgresql/data
       - postgresql-socket:/var/run/postgresql
     network_mode: none
