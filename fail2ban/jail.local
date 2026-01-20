@@ -10,6 +10,7 @@ ignoreip = 127.0.0.1/8 ::1
 [sshd]
 # configuration inherits from jail.conf
 enabled = ${HOST_HAS_SSH}
+backend = polling
 chain   = INPUT
 action  = %(known/action)s
 
