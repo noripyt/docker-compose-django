@@ -98,6 +98,7 @@ demandbase-bot
 Demon
 Deusu
 Devil
+Diffbot
 Digincore
 DigitalPebble
 DIIbot
@@ -157,6 +158,7 @@ Gigablast
 Gigabot
 Go!Zilla
 Go-Ahead-Got-It
+Google-extended
 GoogleOther
 Gotit
 GoZilla
@@ -309,6 +311,7 @@ oBot
 Octopus
 Offline Explorer
 Offline Navigator
+omgili
 Openfind
 OpenLinkProfiler
 Openvas

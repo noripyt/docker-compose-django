@@ -105,6 +105,7 @@ User-agent: demandbase-bot
 User-agent: Demon
 User-agent: Deusu
 User-agent: Devil
+User-agent: Diffbot
 User-agent: Digincore
 User-agent: DigitalPebble
 User-agent: DIIbot
@@ -164,6 +165,7 @@ User-agent: Gigablast
 User-agent: Gigabot
 User-agent: Go!Zilla
 User-agent: Go-Ahead-Got-It
+User-agent: Google-extended
 User-agent: GoogleOther
 User-agent: Gotit
 User-agent: GoZilla
@@ -316,6 +318,7 @@ User-agent: oBot
 User-agent: Octopus
 User-agent: Offline Explorer
 User-agent: Offline Navigator
+User-agent: omgili
 User-agent: Openfind
 User-agent: OpenLinkProfiler
 User-agent: Openvas
