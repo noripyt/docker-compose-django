@@ -1,6 +1,6 @@
 [DEFAULT]
-action = iptables-multiport
-action_allports = iptables-allports
+action = iptables-multiport[port="443,80,22", protocol=tcp, chain="DOCKER-USER"]
+action_allports = iptables-allports[chain="DOCKER-USER"]
 # Prevents banning LAN subnets
 ignoreip = 127.0.0.1/8 ::1
            10.0.0.0/8
