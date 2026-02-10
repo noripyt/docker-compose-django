@@ -5,9 +5,11 @@
 Abonti
 Aboundex
 Acunetix
+AddSearchBot
 ADmantX
 AfD-Verbotsverfahren
 AhrefsBot
+Ai2Bot-Dolma
 AIBOT
 AiHitBot
 Aipbot
@@ -17,6 +19,7 @@ AllSubmitter
 AlphaBot
 Amazonbot
 Anarchie
+anthropic-ai
 Apexoo
 Applebot
 ASPSeek
@@ -51,6 +54,7 @@ Bolt
 BotALot
 Brandprotect
 Brandwatch
+Bravebot
 Bubing
 Buddy
 BuiltBotTough
@@ -71,9 +75,12 @@ ChinaClaw
 Chlooe
 Claritybot
 Claude-SearchBot
+Claude-User
+claude-web
 ClaudeBot
 Cliqzbot
 Cloud mapping
+Cloudflare-AutoRAG
 coccocbot-web
 Cogentbot
 cognitiveseo
@@ -83,7 +90,9 @@ Copier
 CopyRightCheck
 Copyscape
 Cosmos
+Cotoyogi
 Craftbot
+Crawl4AI
 crawler.feedback
 crawler4j
 CrazyWebCrawler
@@ -117,6 +126,7 @@ Download Wonder
 Dragonfly
 Drip
 DTS Agent
+DuckAssistBot
 EasyDL
 Ebingbong
 eCatch
@@ -136,7 +146,7 @@ ExtractorPro
 Extreme Picture Finder
 EyeNetIE
 Ezooms
-FDM
+FacebookBot
 FemtosearchBot
 FHscan
 Fimap
@@ -149,6 +159,7 @@ FrontPage
 Fyrebot
 G-i-g-a-b-o-t
 GalaxyBot
+Gemini-Deep-Research
 Genieo
 GermCrawler
 Getintent
@@ -158,7 +169,9 @@ Gigablast
 Gigabot
 Go!Zilla
 Go-Ahead-Got-It
+Google-CloudVertexBot
 Google-extended
+Google-NotebookLM
 GoogleOther
 Gotit
 GoZilla
@@ -183,6 +196,8 @@ HTTP::Lite
 HTTrack
 Humanlinks
 HybridBot
+iAskBot
+iaskspider
 Iblog
 IbouBot
 Id-search
@@ -219,6 +234,7 @@ Jyxobot
 Kenjin Spider
 Keyword Density
 Kozmosbot
+KunatoCrawler
 Lanshanbot
 Larbin
 LeechFTP
@@ -229,11 +245,13 @@ LibWeb
 Libwhisker
 Lightspeedsystems
 Likse
+LinerBot
 Linkdexbot
 LinkextractorPro
 LinkpadBot
 LinkScan
 LinksManager
+LinkupBot
 LinkWalker
 LinqiaMetadataDownloaderBot
 LinqiaRSSBot
@@ -251,6 +269,7 @@ Magnet
 magpie-crawler
 Mail.RU_Bot
 Majestic12
+Manus-User
 MarkMonitor
 MarkWatch
 Mass Downloader
@@ -324,13 +343,16 @@ page scorer
 PageAnalyzer
 PageGrabber
 PageScorer
+PanguBot
 Panscient
 Papa Foto
 Pavuk
 pcBrowser
 PECL::HTTP
 PeoplePal
+Perplexity-User
 PerplexityBot
+PetalBot
 PHPCrawl
 Pi-Monster
 Picscout
@@ -342,6 +364,7 @@ PleaseCrawl
 plumanalytics
 Pockey
 POE-Component-Client-HTTP
+Poggio-Citations
 Probethenet
 ProPowerBot
 ProWebWalker
@@ -349,6 +372,7 @@ Psbot
 Pump
 PxBroker
 PyCurl
+QualifiedBot
 QueryN Metasearch
 Quick-Crawler
 RankActive
@@ -370,6 +394,7 @@ RocketCrawler
 Rogerbot
 SalesIntelligent
 SBIder
+SBIntuitionsBot
 scan.lol
 ScanAlert
 Scanbot
@@ -443,10 +468,12 @@ TeleportPro
 Telesoft
 Telesphoreo
 Telesphorep
+TerraCotta
 The Intraformant
 TheNomad
 Thinkbot
 TightTwatBot
+Timpibot
 Titan
 Toata
 Toweyabot
@@ -467,7 +494,7 @@ URLy.Warning
 Vacuum
 Vagabondo
 VB Project
-VCI
+VelenPublicWebCrawler
 VeriCiteCrawler
 VidibleScraper
 Virusdie

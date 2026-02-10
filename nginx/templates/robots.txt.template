@@ -12,9 +12,11 @@ User-agent: 80legs
 User-agent: Abonti
 User-agent: Aboundex
 User-agent: Acunetix
+User-agent: AddSearchBot
 User-agent: ADmantX
 User-agent: AfD-Verbotsverfahren
 User-agent: AhrefsBot
+User-agent: Ai2Bot-Dolma
 User-agent: AIBOT
 User-agent: AiHitBot
 User-agent: Aipbot
@@ -24,6 +26,7 @@ User-agent: AllSubmitter
 User-agent: AlphaBot
 User-agent: Amazonbot
 User-agent: Anarchie
+User-agent: anthropic-ai
 User-agent: Apexoo
 User-agent: Applebot
 User-agent: ASPSeek
@@ -58,6 +61,7 @@ User-agent: Bolt
 User-agent: BotALot
 User-agent: Brandprotect
 User-agent: Brandwatch
+User-agent: Bravebot
 User-agent: Bubing
 User-agent: Buddy
 User-agent: BuiltBotTough
@@ -78,9 +82,12 @@ User-agent: ChinaClaw
 User-agent: Chlooe
 User-agent: Claritybot
 User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: claude-web
 User-agent: ClaudeBot
 User-agent: Cliqzbot
 User-agent: Cloud mapping
+User-agent: Cloudflare-AutoRAG
 User-agent: coccocbot-web
 User-agent: Cogentbot
 User-agent: cognitiveseo
@@ -90,7 +97,9 @@ User-agent: Copier
 User-agent: CopyRightCheck
 User-agent: Copyscape
 User-agent: Cosmos
+User-agent: Cotoyogi
 User-agent: Craftbot
+User-agent: Crawl4AI
 User-agent: crawler.feedback
 User-agent: crawler4j
 User-agent: CrazyWebCrawler
@@ -124,6 +133,7 @@ User-agent: Download Wonder
 User-agent: Dragonfly
 User-agent: Drip
 User-agent: DTS Agent
+User-agent: DuckAssistBot
 User-agent: EasyDL
 User-agent: Ebingbong
 User-agent: eCatch
@@ -143,7 +153,7 @@ User-agent: ExtractorPro
 User-agent: Extreme Picture Finder
 User-agent: EyeNetIE
 User-agent: Ezooms
-User-agent: FDM
+User-agent: FacebookBot
 User-agent: FemtosearchBot
 User-agent: FHscan
 User-agent: Fimap
@@ -156,6 +166,7 @@ User-agent: FrontPage
 User-agent: Fyrebot
 User-agent: G-i-g-a-b-o-t
 User-agent: GalaxyBot
+User-agent: Gemini-Deep-Research
 User-agent: Genieo
 User-agent: GermCrawler
 User-agent: Getintent
@@ -165,7 +176,9 @@ User-agent: Gigablast
 User-agent: Gigabot
 User-agent: Go!Zilla
 User-agent: Go-Ahead-Got-It
+User-agent: Google-CloudVertexBot
 User-agent: Google-extended
+User-agent: Google-NotebookLM
 User-agent: GoogleOther
 User-agent: Gotit
 User-agent: GoZilla
@@ -190,6 +203,8 @@ User-agent: HTTP::Lite
 User-agent: HTTrack
 User-agent: Humanlinks
 User-agent: HybridBot
+User-agent: iAskBot
+User-agent: iaskspider
 User-agent: Iblog
 User-agent: IbouBot
 User-agent: Id-search
@@ -226,6 +241,7 @@ User-agent: Jyxobot
 User-agent: Kenjin Spider
 User-agent: Keyword Density
 User-agent: Kozmosbot
+User-agent: KunatoCrawler
 User-agent: Lanshanbot
 User-agent: Larbin
 User-agent: LeechFTP
@@ -236,11 +252,13 @@ User-agent: LibWeb
 User-agent: Libwhisker
 User-agent: Lightspeedsystems
 User-agent: Likse
+User-agent: LinerBot
 User-agent: Linkdexbot
 User-agent: LinkextractorPro
 User-agent: LinkpadBot
 User-agent: LinkScan
 User-agent: LinksManager
+User-agent: LinkupBot
 User-agent: LinkWalker
 User-agent: LinqiaMetadataDownloaderBot
 User-agent: LinqiaRSSBot
@@ -258,6 +276,7 @@ User-agent: Magnet
 User-agent: magpie-crawler
 User-agent: Mail.RU_Bot
 User-agent: Majestic12
+User-agent: Manus-User
 User-agent: MarkMonitor
 User-agent: MarkWatch
 User-agent: Mass Downloader
@@ -331,13 +350,16 @@ User-agent: page scorer
 User-agent: PageAnalyzer
 User-agent: PageGrabber
 User-agent: PageScorer
+User-agent: PanguBot
 User-agent: Panscient
 User-agent: Papa Foto
 User-agent: Pavuk
 User-agent: pcBrowser
 User-agent: PECL::HTTP
 User-agent: PeoplePal
+User-agent: Perplexity-User
 User-agent: PerplexityBot
+User-agent: PetalBot
 User-agent: PHPCrawl
 User-agent: Pi-Monster
 User-agent: Picscout
@@ -349,6 +371,7 @@ User-agent: PleaseCrawl
 User-agent: plumanalytics
 User-agent: Pockey
 User-agent: POE-Component-Client-HTTP
+User-agent: Poggio-Citations
 User-agent: Probethenet
 User-agent: ProPowerBot
 User-agent: ProWebWalker
@@ -356,6 +379,7 @@ User-agent: Psbot
 User-agent: Pump
 User-agent: PxBroker
 User-agent: PyCurl
+User-agent: QualifiedBot
 User-agent: QueryN Metasearch
 User-agent: Quick-Crawler
 User-agent: RankActive
@@ -377,6 +401,7 @@ User-agent: RocketCrawler
 User-agent: Rogerbot
 User-agent: SalesIntelligent
 User-agent: SBIder
+User-agent: SBIntuitionsBot
 User-agent: scan.lol
 User-agent: ScanAlert
 User-agent: Scanbot
@@ -450,10 +475,12 @@ User-agent: TeleportPro
 User-agent: Telesoft
 User-agent: Telesphoreo
 User-agent: Telesphorep
+User-agent: TerraCotta
 User-agent: The Intraformant
 User-agent: TheNomad
 User-agent: Thinkbot
 User-agent: TightTwatBot
+User-agent: Timpibot
 User-agent: Titan
 User-agent: Toata
 User-agent: Toweyabot
@@ -474,7 +501,7 @@ User-agent: URLy.Warning
 User-agent: Vacuum
 User-agent: Vagabondo
 User-agent: VB Project
-User-agent: VCI
+User-agent: VelenPublicWebCrawler
 User-agent: VeriCiteCrawler
 User-agent: VidibleScraper
 User-agent: Virusdie
