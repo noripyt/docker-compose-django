@@ -75,6 +75,7 @@ User-agent: CherryPicker
 User-agent: ChinaClaw
 User-agent: Chlooe
 User-agent: Claritybot
+User-agent: Claude-SearchBot
 User-agent: ClaudeBot
 User-agent: Cliqzbot
 User-agent: Cloud mapping
@@ -164,6 +165,7 @@ User-agent: GoogleOther
 User-agent: Gotit
 User-agent: GoZilla
 User-agent: Go!Zilla
+User-agent: GPTBot
 User-agent: Grabber
 User-agent: GrabNet
 User-agent: Grafula
@@ -306,6 +308,7 @@ User-agent: Ninja
 User-agent: Nmap
 User-agent: NPbot
 User-agent: Nutch
+User-agent: OAI-SearchBot
 User-agent: oBot
 User-agent: Octopus
 User-agent: Offline Explorer
@@ -385,6 +388,7 @@ User-agent: Seomoz
 User-agent: SEOprofiler
 User-agent: seoscanners
 User-agent: SEOstats
+User-agent: SERankingBacklinksBot
 User-agent: sexsearcher
 User-agent: Seznam
 User-agent: SeznamBot
