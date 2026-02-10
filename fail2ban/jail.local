@@ -26,6 +26,12 @@ enabled = true
 chain   = DOCKER-USER
 action  = %(known/action)s
 
+[nginx-429]
+# configuration inherits from jail.d/nginx-429.conf
+enabled = true
+chain   = DOCKER-USER
+action  = %(known/action)s
+
 [nginx-botsearch]
 # configuration inherits from jail.conf
 enabled = true
