@@ -47,8 +47,8 @@ User-agent: BDFetch
 User-agent: BetaBot
 User-agent: Bigfoot
 User-agent: Bitacle
-User-agent: Blackboard
 User-agent: Black Hole
+User-agent: Blackboard
 User-agent: BlackWidow
 User-agent: BLEXBot
 User-agent: Blow
@@ -91,8 +91,8 @@ User-agent: CopyRightCheck
 User-agent: Copyscape
 User-agent: Cosmos
 User-agent: Craftbot
-User-agent: crawler4j
 User-agent: crawler.feedback
+User-agent: crawler4j
 User-agent: CrazyWebCrawler
 User-agent: Crescent
 User-agent: CSHttp
@@ -153,6 +153,7 @@ User-agent: Foobot
 User-agent: Freeuploader
 User-agent: FrontPage
 User-agent: Fyrebot
+User-agent: G-i-g-a-b-o-t
 User-agent: GalaxyBot
 User-agent: Genieo
 User-agent: GermCrawler
@@ -161,12 +162,11 @@ User-agent: GetRight
 User-agent: GetWeb
 User-agent: Gigablast
 User-agent: Gigabot
-User-agent: G-i-g-a-b-o-t
+User-agent: Go!Zilla
 User-agent: Go-Ahead-Got-It
 User-agent: GoogleOther
 User-agent: Gotit
 User-agent: GoZilla
-User-agent: Go!Zilla
 User-agent: GPTBot
 User-agent: Grabber
 User-agent: GrabNet
@@ -190,8 +190,8 @@ User-agent: Humanlinks
 User-agent: HybridBot
 User-agent: Iblog
 User-agent: IbouBot
-User-agent: IDBot
 User-agent: Id-search
+User-agent: IDBot
 User-agent: IlseBot
 User-agent: Image Fetch
 User-agent: Image Sucker
@@ -249,26 +249,26 @@ User-agent: Lmspider
 User-agent: LNSpiderguy
 User-agent: Ltx71
 User-agent: lwp-request
-User-agent: LWP::Simple
 User-agent: lwp-trivial
-User-agent: Magnet
+User-agent: LWP::Simple
 User-agent: Mag-Net
+User-agent: Magnet
 User-agent: magpie-crawler
 User-agent: Mail.RU_Bot
 User-agent: Majestic12
 User-agent: MarkMonitor
 User-agent: MarkWatch
-User-agent: Masscan
 User-agent: Mass Downloader
+User-agent: Masscan
 User-agent: Mata Hari
 User-agent: MauiBot
 User-agent: Meanpathbot
 User-agent: mediawords
 User-agent: MegaIndex.ru
-User-agent: Metauri
 User-agent: meta-externalads
 User-agent: meta-externalagent
 User-agent: meta-webindexer
+User-agent: Metauri
 User-agent: MFC_Tear_Sample
 User-agent: Microsoft Data Access
 User-agent: Microsoft URL Control
@@ -279,10 +279,10 @@ User-agent: MJ12bot
 User-agent: Mojeek
 User-agent: Morfeus Fucking Scanner
 User-agent: Mr.4x3
+User-agent: MS Web Services Client Protocol
 User-agent: MSFrontPage
 User-agent: MSIECrawler
 User-agent: Msrabot
-User-agent: MS Web Services Client Protocol
 User-agent: muhstik-scan
 User-agent: Musobot
 User-agent: Name Intelligence
@@ -291,6 +291,7 @@ User-agent: Navroad
 User-agent: NearSite
 User-agent: Needle
 User-agent: Nessus
+User-agent: Net Vampire
 User-agent: NetAnts
 User-agent: Netcraft
 User-agent: netEstate NE Crawler
@@ -298,7 +299,6 @@ User-agent: NetLyzer
 User-agent: NetMechanic
 User-agent: NetSpider
 User-agent: Nettrack
-User-agent: Net Vampire
 User-agent: Netvibes
 User-agent: NetZIP
 User-agent: NextGenSearchBot
@@ -323,10 +323,10 @@ User-agent: OrangeBot
 User-agent: OrangeSpider
 User-agent: OutclicksBot
 User-agent: OutfoxBot
-User-agent: PageAnalyzer
 User-agent: Page Analyzer
-User-agent: PageGrabber
 User-agent: page scorer
+User-agent: PageAnalyzer
+User-agent: PageGrabber
 User-agent: PageScorer
 User-agent: Panscient
 User-agent: Papa Foto
@@ -336,11 +336,11 @@ User-agent: PECL::HTTP
 User-agent: PeoplePal
 User-agent: PerplexityBot
 User-agent: PHPCrawl
+User-agent: Pi-Monster
 User-agent: Picscout
 User-agent: Picsearch
 User-agent: PictureFinder
 User-agent: Pimonster
-User-agent: Pi-Monster
 User-agent: Pixray
 User-agent: PleaseCrawl
 User-agent: plumanalytics
@@ -374,9 +374,9 @@ User-agent: RocketCrawler
 User-agent: Rogerbot
 User-agent: SalesIntelligent
 User-agent: SBIder
+User-agent: scan.lol
 User-agent: ScanAlert
 User-agent: Scanbot
-User-agent: scan.lol
 User-agent: Scrapy
 User-agent: Screaming
 User-agent: ScreenerBot
@@ -398,13 +398,13 @@ User-agent: SeznamBot
 User-agent: Shodan
 User-agent: Siphon
 User-agent: SISTRIX
+User-agent: Site Sucker
 User-agent: Sitebeam
 User-agent: SiteExplorer
 User-agent: Siteimprove
 User-agent: SiteLockSpider
 User-agent: SiteSnagger
 User-agent: SiteSucker
-User-agent: Site Sucker
 User-agent: Sitevigil
 User-agent: Slackbot-LinkExpanding
 User-agent: SlySearch
@@ -448,16 +448,16 @@ User-agent: Telesoft
 User-agent: Telesphoreo
 User-agent: Telesphorep
 User-agent: The Intraformant
-User-agent: Thinkbot
 User-agent: TheNomad
+User-agent: Thinkbot
 User-agent: TightTwatBot
 User-agent: Titan
 User-agent: Toata
 User-agent: Toweyabot
 User-agent: Trendiction
-User-agent: Trendictionbot
 User-agent: trendiction.com
 User-agent: trendiction.de
+User-agent: Trendictionbot
 User-agent: True_Robot
 User-agent: Turingos
 User-agent: Turnitin
@@ -466,8 +466,8 @@ User-agent: TwengaBot
 User-agent: Twice
 User-agent: Typhoeus
 User-agent: UnisterBot
-User-agent: URLy.Warning
 User-agent: URLy Warning
+User-agent: URLy.Warning
 User-agent: Vacuum
 User-agent: Vagabondo
 User-agent: VB Project
@@ -482,38 +482,38 @@ User-agent: Wallpapers/3.0
 User-agent: WallpapersHD
 User-agent: WASALive-Bot
 User-agent: WBSearchBot
+User-agent: Web Auto
+User-agent: Web Collage
+User-agent: Web Enhancer
+User-agent: Web Fetch
+User-agent: Web Fuck
+User-agent: Web Pix
+User-agent: Web Sauger
+User-agent: Web Sucker
 User-agent: Webalta
 User-agent: WebAuto
-User-agent: Web Auto
 User-agent: WebBandit
 User-agent: WebCollage
-User-agent: Web Collage
 User-agent: WebCopier
 User-agent: WEBDAV
 User-agent: WebEnhancer
-User-agent: Web Enhancer
 User-agent: WebFetch
-User-agent: Web Fetch
 User-agent: WebFuck
-User-agent: Web Fuck
 User-agent: WebGo IS
 User-agent: WebImageCollector
 User-agent: WebLeacher
 User-agent: WebmasterWorldForumBot
 User-agent: webmeup-crawler
 User-agent: WebPix
-User-agent: Web Pix
 User-agent: WebReaper
 User-agent: WebSauger
-User-agent: Web Sauger
 User-agent: Webshag
+User-agent: Website Quester
 User-agent: WebsiteExtractor
 User-agent: WebsiteQuester
-User-agent: Website Quester
 User-agent: Webster
 User-agent: WebStripper
 User-agent: WebSucker
-User-agent: Web Sucker
 User-agent: WebWhacker
 User-agent: WebZIP
 User-agent: WeSEE
@@ -536,8 +536,8 @@ User-agent: WWW::Mechanize
 User-agent: WWWOFFLE
 User-agent: x09Mozilla
 User-agent: x22Mozilla
-User-agent: Xaldon_WebSpider
 User-agent: Xaldon WebSpider
+User-agent: Xaldon_WebSpider
 User-agent: Xenu
 User-agent: xpymep1.exe
 User-agent: YoudaoBot
