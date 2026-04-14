@@ -300,9 +300,9 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: 100M
+          memory: 500M
         reservations:
-          memory: 20M
+          memory: 100M
     logging: *limited_logging
   ofelia:
     build:
