@@ -49,3 +49,4 @@ action  = %(known/action)s
 enabled = true
 chain   = DOCKER-USER
 action  = %(known/action)s
+bantime = 604800
