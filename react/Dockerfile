@@ -1,4 +1,4 @@
-FROM node:24.11.1-alpine
+FROM node:24.22.2-alpine
 
 
 RUN adduser --disabled-password --home /srv --no-create-home react
