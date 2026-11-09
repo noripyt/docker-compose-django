@@ -42,11 +42,11 @@ ENV PATH="/srv/.venv/bin:/srv/.local/bin:$PATH" \
     DJANGO_THREADS=${DJANGO_THREADS} \
     DOMAIN=${DOMAIN}
 
-RUN pip install --no-cache-dir uv && uv venv
-COPY --chown=django ${DJANGO_ROOT}/pyproject.toml pyproject.toml
-RUN uv pip install --no-cache-dir -r pyproject.toml ${DJANGO_EXTRA_PIP_ARGS}
-RUN if [ "$DJANGO_ENVIRONMENT" = "dev" ] ; then uv pip install --no-cache-dir --group dev ; \
-    else uv pip install --no-cache-dir --group prod ; fi
+RUN pip install --no-cache-dir uv
+ENV UV_NO_CACHE=1
+COPY --chown=django ${DJANGO_ROOT}/pyproject.toml ${DJANGO_ROOT}/uv.lock ./
+RUN if [ "$DJANGO_ENVIRONMENT" = "dev" ] ; then GROUP=dev ; else GROUP=prod ; fi \
+    && uv sync --frozen --no-install-project --no-default-groups --group $GROUP ${DJANGO_EXTRA_PIP_ARGS}
 
 COPY --chown=django ${DJANGO_ROOT} /srv
 RUN --mount=type=secret,id=.env.secrets,uid=1000 sh -c "${DJANGO_POST_INSTALL_RUN}"

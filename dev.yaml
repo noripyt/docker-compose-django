@@ -9,9 +9,12 @@ services:
           target: /srv
           ignore:
             - ${WATCH_RELATIVE_ROOT:-.}/${DJANGO_ROOT}/pyproject.toml
+            - ${WATCH_RELATIVE_ROOT:-.}/${DJANGO_ROOT}/uv.lock
             - ${WATCH_RELATIVE_ROOT:-.}/${DJANGO_ROOT}/nginx_templates/
         - action: rebuild
           path: ${WATCH_RELATIVE_ROOT:-.}/${DJANGO_ROOT}/pyproject.toml
+        - action: rebuild
+          path: ${WATCH_RELATIVE_ROOT:-.}/${DJANGO_ROOT}/uv.lock
   nginx:
     labels:
       - traefik.http.routers.$PROJECT-nginx.entrypoints=web
