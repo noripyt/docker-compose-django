@@ -43,11 +43,10 @@ ENV PATH="/srv/.venv/bin:/srv/.local/bin:$PATH" \
     DOMAIN=${DOMAIN}
 
 RUN pip install --no-cache-dir uv && uv venv
-# TODO: Replace requirements txt files with pyproject.toml & uv.lock.
-COPY --chown=django ${DJANGO_ROOT}/requirements/* requirements/
-RUN uv pip install --no-cache-dir -r requirements/base.txt ${DJANGO_EXTRA_PIP_ARGS}
-RUN if [ "$DJANGO_ENVIRONMENT" = "dev" ] ; then uv pip install --no-cache-dir -r requirements/dev.txt ; \
-    else uv pip install --no-cache-dir -r requirements/prod.txt ; fi
+COPY --chown=django ${DJANGO_ROOT}/pyproject.toml pyproject.toml
+RUN uv pip install --no-cache-dir -r pyproject.toml ${DJANGO_EXTRA_PIP_ARGS}
+RUN if [ "$DJANGO_ENVIRONMENT" = "dev" ] ; then uv pip install --no-cache-dir --group dev ; \
+    else uv pip install --no-cache-dir --group prod ; fi
 
 COPY --chown=django ${DJANGO_ROOT} /srv
 RUN --mount=type=secret,id=.env.secrets,uid=1000 sh -c "${DJANGO_POST_INSTALL_RUN}"
