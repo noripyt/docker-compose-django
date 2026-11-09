@@ -29,7 +29,6 @@ ONBUILD RUN npm install
 FROM ${DJANGO_NODE_BUILD}
 
 ARG DJANGO_ROOT
-ARG DJANGO_EXTRA_PIP_ARGS
 ARG DJANGO_POST_INSTALL_RUN
 ARG DJANGO_ENVIRONMENT
 ARG DJANGO_CPUS
@@ -46,7 +45,7 @@ RUN pip install --no-cache-dir uv
 ENV UV_NO_CACHE=1
 COPY --chown=django ${DJANGO_ROOT}/pyproject.toml ${DJANGO_ROOT}/uv.lock ./
 RUN if [ "$DJANGO_ENVIRONMENT" = "dev" ] ; then GROUP=dev ; else GROUP=prod ; fi \
-    && uv sync --frozen --no-install-project --no-default-groups --group $GROUP ${DJANGO_EXTRA_PIP_ARGS}
+    && uv sync --frozen --no-install-project --no-default-groups --group $GROUP
 
 COPY --chown=django ${DJANGO_ROOT} /srv
 RUN --mount=type=secret,id=.env.secrets,uid=1000 sh -c "${DJANGO_POST_INSTALL_RUN}"
