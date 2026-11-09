@@ -320,6 +320,10 @@ services:
     depends_on:
       traefik:
         condition: service_healthy
+      # Ofelia reads job labels from the containers that exist when it starts,
+      # so Django (which carries the jobs) must be up before it.
+      django:
+        condition: service_healthy
     cap_drop:
       - ALL
     deploy:
