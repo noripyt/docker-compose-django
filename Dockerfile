@@ -29,7 +29,6 @@ ONBUILD RUN npm install
 FROM ${DJANGO_NODE_BUILD}
 
 ARG DJANGO_ROOT
-ARG DJANGO_EXTRA_PIP_ARGS
 ARG DJANGO_POST_INSTALL_RUN
 ARG DJANGO_ENVIRONMENT
 ARG DJANGO_CPUS
@@ -42,12 +41,11 @@ ENV PATH="/srv/.venv/bin:/srv/.local/bin:$PATH" \
     DJANGO_THREADS=${DJANGO_THREADS} \
     DOMAIN=${DOMAIN}
 
-RUN pip install --no-cache-dir uv && uv venv
-# TODO: Replace requirements txt files with pyproject.toml & uv.lock.
-COPY --chown=django ${DJANGO_ROOT}/requirements/* requirements/
-RUN uv pip install --no-cache-dir -r requirements/base.txt ${DJANGO_EXTRA_PIP_ARGS}
-RUN if [ "$DJANGO_ENVIRONMENT" = "dev" ] ; then uv pip install --no-cache-dir -r requirements/dev.txt ; \
-    else uv pip install --no-cache-dir -r requirements/prod.txt ; fi
+RUN pip install --no-cache-dir uv
+ENV UV_NO_CACHE=1
+COPY --chown=django ${DJANGO_ROOT}/pyproject.toml ${DJANGO_ROOT}/uv.lock ./
+RUN if [ "$DJANGO_ENVIRONMENT" = "dev" ] ; then GROUP=dev ; else GROUP=prod ; fi \
+    && uv sync --frozen --no-install-project --no-default-groups --group $GROUP
 
 COPY --chown=django ${DJANGO_ROOT} /srv
 RUN --mount=type=secret,id=.env.secrets,uid=1000 sh -c "${DJANGO_POST_INSTALL_RUN}"
