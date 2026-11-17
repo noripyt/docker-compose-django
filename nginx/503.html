@@ -1,69 +1,177 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.ico" />
     <title>503 error</title>
     <style>
+      :root {
+        --bg: #2a2523;
+        --accent: #f4b26b;
+        --text: #fff;
+        --muted: rgba(255, 255, 255, 0.72);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        background: var(--bg);
+      }
       body {
-        font-family: Arial, Helvetica, sans-serif;
-        margin: 50px auto;
-        width: 1000px;
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: clamp(16px, 5vh, 48px) 24px clamp(20px, 6vh, 64px);
+        font-family: Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.6;
+        color: var(--text);
+        background: var(--bg);
+        border-bottom: 10px solid var(--accent);
       }
-      table {
-        border-collapse: collapse;
+      main {
+        width: 100%;
+        max-width: 640px;
+        text-align: center;
       }
-      table td, table th {
-        border: 1px solid grey;
-        padding: 5px;
+      .code {
+        margin: 0;
+        font-size: clamp(56px, 13vh, 104px);
+        line-height: 1;
+        font-weight: 700;
+        color: var(--accent);
+      }
+      h1 {
+        margin: clamp(8px, 2vh, 16px) 0 clamp(6px, 1.5vh, 12px);
+        font-size: 22px;
+        font-weight: 700;
+      }
+      p {
+        margin: 0;
+        color: var(--muted);
+      }
+      a {
+        color: var(--text);
+      }
+      .retry {
+        display: inline-block;
+        margin-top: clamp(16px, 4vh, 36px);
+        padding: 6px 12px;
+        border-bottom: 1px solid var(--text);
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-decoration: none;
+      }
+      .retry:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+      }
+      @media (max-width: 480px) {
+        .code {
+          font-size: 76px;
+        }
+        h1 {
+          font-size: 19px;
+        }
+      }
+      ul {
+        margin: clamp(16px, 3vh, 32px) 0 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: case;
+        text-align: left;
+      }
+      li {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        padding: 18px 20px;
+        margin-bottom: 12px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.07);
+        color: var(--muted);
+      }
+      li::before {
+        content: counter(case);
+        counter-increment: case;
+        flex: none;
+        width: 32px;
+        height: 32px;
+        border: 1.5px solid var(--accent);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--accent);
+      }
+      @media (min-width: 900px) {
+        main.wide {
+          max-width: 1000px;
+        }
+        ul {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 16px;
+        }
+        li {
+          flex-direction: column;
+          gap: 12px;
+          margin-bottom: 0;
+          font-size: 14px;
+          line-height: 1.5;
+        }
+      }
+      li > div {
+        min-width: 0;
+      }
+      li strong {
+        display: block;
+        color: var(--text);
+      }
+      li span {
+        display: block;
+        margin-top: 4px;
       }
     </style>
   </head>
   <body>
-    <h1>503 error</h1>
-    <h3>Sorry, the website is temporarily unavailable.</h3>
-    <p>You are probably in one of these cases:</p>
-    <table>
-      <tr>
-        <th style="border: none;"></th>
-        <th>Cause</th>
-        <th>Solution</th>
-      </tr>
-      <tr>
-        <th>1<sup>st</sup> case</th>
-        <td>
-          Too many people inside the same building as yours
-          (or more precisely, at the same <a href="https://en.wikipedia.org/wiki/IP_address">IP address</a>)
-          are currently accessing the website.
-        </td>
-        <td>
-          <a href="mailto:contact@noripyt.com">Contact us</a>,
-          we will adjust that.  If you know it, specify the amount of
-          persons using the website at the same time at your address.
-        </td>
-      </tr>
-      <tr>
-        <th>2<sup>nd</sup> case</th>
-        <td>
+    <main class="wide">
+      <p class="code">503</p>
+      <h1>Sorry, the website is temporarily unavailable.</h1>
+      <p>You are probably in one of these cases:</p>
+      <ul>
+        <li><div>
+          <strong>Too many people at the same address</strong>
+          Too many people inside the same building as yours (or more precisely, at the same
+          <a href="https://en.wikipedia.org/wiki/IP_address">IP address</a>) are currently accessing the website.
+          <span>
+            <a href="mailto:contact@noripyt.com">Contact us</a>, we will adjust that. If you know it, specify the
+            amount of persons using the website at the same time at your address.
+          </span>
+        </div></li>
+        <li><div>
+          <strong>Denial-of-service attempt</strong>
           You are trying to do a
-          <a href="https://en.wikipedia.org/wiki/Denial-of-service_attack">
-            denial-of-service attack</a>.
-        </td>
-        <td>
-          The website is protected against this type of attack.
-          You see this error because you are about to get banned.
-          Other users are not getting this error.
-        </td>
-      </tr>
-      <tr>
-        <th>3<sup>rd</sup> case</th>
-        <td>
+          <a href="https://en.wikipedia.org/wiki/Denial-of-service_attack">denial-of-service attack</a>.
+          <span>
+            The website is protected against this type of attack. You see this error because you are about to get
+            banned. Other users are not getting this error.
+          </span>
+        </div></li>
+        <li><div>
+          <strong>Refreshing too fast</strong>
           You are hitting the refresh button extremely fast.
-        </td>
-        <td>
-          Don’t do that.
-        </td>
-      </tr>
-    </table>
-    <br />
+          <span>Don’t do that.</span>
+        </div></li>
+      </ul>
+      <a class="retry" href="javascript:location.reload()">Try again</a>
+    </main>
   </body>
 </html>

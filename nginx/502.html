@@ -1,22 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.ico" />
     <title>502 error</title>
     <style>
+      :root {
+        --bg: #2a2523;
+        --accent: #f4b26b;
+        --text: #fff;
+        --muted: rgba(255, 255, 255, 0.72);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        background: var(--bg);
+      }
       body {
-        font-family: Arial, Helvetica, sans-serif;
-        margin: 50px auto;
-        width: 1000px;
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: clamp(16px, 5vh, 48px) 24px clamp(20px, 6vh, 64px);
+        font-family: Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.6;
+        color: var(--text);
+        background: var(--bg);
+        border-bottom: 10px solid var(--accent);
+      }
+      main {
+        width: 100%;
+        max-width: 460px;
+        text-align: center;
+      }
+      .code {
+        margin: 0;
+        font-size: clamp(56px, 13vh, 104px);
+        line-height: 1;
+        font-weight: 700;
+        color: var(--accent);
+      }
+      h1 {
+        margin: clamp(8px, 2vh, 16px) 0 clamp(6px, 1.5vh, 12px);
+        font-size: 22px;
+        font-weight: 700;
+      }
+      p {
+        margin: 0;
+        color: var(--muted);
+      }
+      a {
+        color: var(--text);
+      }
+      .retry {
+        display: inline-block;
+        margin-top: clamp(16px, 4vh, 36px);
+        padding: 6px 12px;
+        border-bottom: 1px solid var(--text);
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-decoration: none;
+      }
+      .retry:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+      }
+      @media (max-width: 480px) {
+        .code {
+          font-size: 76px;
+        }
+        h1 {
+          font-size: 19px;
+        }
       }
     </style>
   </head>
   <body>
-    <h1>502 error</h1>
-    <h3>The server is unable to access one of its programs.</h3>
-    <p>
-      No luck, you are trying to reach the site exactly as we restart the server!  This error can generally occur
-      for a few seconds after our intervention.
-    </p>
+    <main>
+      <p class="code">502</p>
+      <h1>The server is unable to access one of its programs.</h1>
+      <p>
+        You are trying to reach the site exactly as we restart the server. This error can generally occur
+        for a few seconds after our intervention.
+      </p>
+      <a class="retry" href="javascript:location.reload()">Try again</a>
+    </main>
   </body>
 </html>
